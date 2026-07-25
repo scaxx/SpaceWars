@@ -24,6 +24,7 @@ pygame.mixer.music.play(-1)
 #Efectos de sonido
 explosionSound = pygame.mixer.Sound("assets/sound/explosion.mp3") #Explosión
 gunshotSound = pygame.mixer.Sound("assets/sound/plasma-gunshot.mp3") #Disparo
+#coinSound = pygame.mixer.Sound("assets/sound/coin.mp3") #Moneda
 selected = pygame.mixer.Sound("assets/sound/selected.mp3") #Seleccionado
 
 #Mutear música y efectos
@@ -325,9 +326,10 @@ def main():
     while run:
 
         #Se maneja el tiempo y el contador de asteroides
+        elapsedMS = clock.tick(60)
         currentTime = pygame.time.get_ticks()
-        rockCount += clock.tick(60)
-        asteroidCount += clock.tick(60)
+        rockCount += elapsedMS
+        asteroidCount += elapsedMS
         elapsedTime = time.time() - startTime
 
         #Si el jugador pierde
