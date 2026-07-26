@@ -64,6 +64,11 @@ life = pygame.image.load("assets/extras/life.png") #Vida
 lifeW = 25 #Tamaño
 lifeH = 25 #Tamaño
 life = pygame.transform.scale(life, (lifeW, lifeH)) #Se crea la vida
+#Vidas perdidas
+emptyLife = pygame.image.load("assets/extras/emptyLife.png") #Vida vacía
+emptyLifeW = 25 #Tamaño
+emptyLifeH = 25 #Tamaño
+emptyLife = pygame.transform.scale(emptyLife, (emptyLifeW, emptyLifeH)) #Se crea la vida vacía
 
 #Configuración de estrella especial
 specialStar = pygame.image.load("assets/extras/specialStar.png") #Estrella especial
@@ -317,6 +322,10 @@ def main():
     coins = []
     coinsCollected = 0
 
+    #Manejo de vidas
+    lives = 3
+    hitTime = None
+
     #Manejo de balas
     bullets = []
     shootInterval = 1000 
@@ -449,9 +458,14 @@ def main():
                     rocks.remove(rockObj)
                 else:
                     over = (rockObj["position"][0] - playerPosition[0], rockObj["position"][1] - playerPosition[1])
-                    if playerMask.overlap(rockMask, over):
+                    if playerMask.overlap(rockMask, over) and playerState == "normal":
                         rockObj["state"] = "explosion"
-                        playerState = "collision"
+                        lives -= 1
+                        if lives == 0:
+                            playerState = "collision"
+                        else:
+                            playerState = "hit"
+                            hitTime = currentTime
                         rockObj["destroyTime"] = currentTime
                         explosionSound.play()
                         break
@@ -468,9 +482,14 @@ def main():
                     asteroids.remove(asteroidObj)
                 else:
                     over = (asteroidObj["position"][0] - playerPosition[0], asteroidObj["position"][1] - playerPosition[1])
-                    if playerMask.overlap(asteroidMask, over):
+                    if playerMask.overlap(asteroidMask, over) and playerState == "normal":
                         asteroidObj["state"] = "collision"
-                        playerState = "collision"
+                        lives -= 1
+                        if lives == 0:
+                            playerState = "collision"
+                        else:
+                            playerState = "hit"
+                            hitTime = currentTime
                         asteroidObj["destroyTime"] = currentTime
                         explosionSound.play()
                         break
@@ -495,7 +514,12 @@ def main():
                             explosionSound.play()
                             points += 5
                             break
-                            
+
+        #Se revierte el estado "hit" del jugador después de 3 segundos
+        if playerState == "hit":
+            if currentTime - hitTime > 3000:
+                playerState = "normal"
+        
         #Explosión de la nave: El jugador pierde el juego
         if playerHit:
             gameOver = font.render("Game Over", 2, "white")
