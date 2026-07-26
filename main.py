@@ -61,18 +61,16 @@ shield = pygame.transform.scale(shield, (shieldW, shieldH)) #Se crea la escudo
 
 #Configuración de vida
 life = pygame.image.load("assets/extras/life.png") #Vida
-lifeW = 25 #Tamaño
+lifeW = 40 #Tamaño
 lifeH = 25 #Tamaño
 life = pygame.transform.scale(life, (lifeW, lifeH)) #Se crea la vida
 #Vidas perdidas
 emptyLife = pygame.image.load("assets/extras/emptyLife.png") #Vida vacía
-emptyLifeW = 25 #Tamaño
-emptyLifeH = 25 #Tamaño
-emptyLife = pygame.transform.scale(emptyLife, (emptyLifeW, emptyLifeH)) #Se crea la vida vacía
+emptyLife = pygame.transform.scale(emptyLife, (lifeW, lifeH)) #Se crea la vida vacía
 
 #Configuración de estrella especial
 specialStar = pygame.image.load("assets/extras/specialStar.png") #Estrella especial
-specialStarW = 25 #Tamaño
+specialStarW = 40 #Tamaño
 specialStarH = 25 #Tamaño
 specialStar = pygame.transform.scale(specialStar, (specialStarW, specialStarH)) #Se crea la estrella especial
 
@@ -232,7 +230,7 @@ def optionsMenu():
         pygame.time.delay(100)
 
 #Función: Dibujar objetos en la pantalla
-def draw(player, playerPosition, playerState, elapsedTime, soundButton, muteButton, homeButton, points, rocks, asteroids, coins, coinsCollected, bullets):
+def draw(player, playerPosition, playerState, elapsedTime, soundButton, muteButton, homeButton, points, rocks, asteroids, coins, coinsCollected, lives, bullets):
     myScreen.blit(back, (0, 0))
 
     #Dibujar tiempo
@@ -252,7 +250,24 @@ def draw(player, playerPosition, playerState, elapsedTime, soundButton, muteButt
     else:
         myScreen.blit(muteButton, (homeButtonX - buttonWidth - 10, buttonY))
 
+    #Dibujar monedas
+    for coinObj in coins:
+        myScreen.blit(coinObj["image"], coinObj["position"])
+
+    coinIconX = timeRecord.get_width() + pointsRecord.get_width() + 80
+    myScreen.blit(coin, (coinIconX, 25))
+
+    coinRecord = font.render(f"{coinsCollected}", 1, "white")
+    myScreen.blit(coinRecord, (coinIconX + coinW + 10, 10))
+
     #Dibujar vidas y escudo
+    livesBaseX = coinIconX + coinW + 10 + coinRecord.get_width() + 50
+    for l in range(3):
+        lifeIconX = livesBaseX + l * (lifeW + 10)
+        if l < lives:
+            myScreen.blit(life, (lifeIconX, 10))
+        else:
+            myScreen.blit(emptyLife, (lifeIconX, 10))
 
     #Dibujar rocas
     for rockObj in rocks:
@@ -267,16 +282,6 @@ def draw(player, playerPosition, playerState, elapsedTime, soundButton, muteButt
             myScreen.blit(asteroidObj["image"], asteroidObj["position"])
         elif asteroidObj["state"] == "explosion" or asteroidObj["state"] == "collision":
             myScreen.blit(explosion1, asteroidObj["position"])
-
-    #Dibujar monedas
-    for coinObj in coins:
-        myScreen.blit(coinObj["image"], coinObj["position"])
-
-    coinIconX = timeRecord.get_width() + pointsRecord.get_width() + 80
-    myScreen.blit(coin, (coinIconX, 25))
-
-    coinRecord = font.render(f"{coinsCollected}", 1, "white")
-    myScreen.blit(coinRecord, (coinIconX + coinW + 10, 10))
 
     #Dibujar balas
     for bulletPosition in bullets:
@@ -528,11 +533,13 @@ def main():
             myScreen.blit(timeRecord, (width / 2 - timeRecord.get_width() / 2, height / 2 - gameOver.get_height() / 2 + 50))
             pointsRecord = font.render(f"Points: {points}", 1, "white")
             myScreen.blit(pointsRecord, (width / 2 - pointsRecord.get_width() / 2, height / 2 - gameOver.get_height() / 2 + 100))
+            coinsRecord = font.render(f"Coins Collected: {coinsCollected}", 1, "white")
+            myScreen.blit(coinsRecord, (width / 2 - coinsRecord.get_width() / 2, height / 2 - gameOver.get_height() / 2 + 150))
             pygame.display.update()
             pygame.time.delay(3000)
             return
 
-        draw(player, playerPosition, playerState, elapsedTime, soundButton, muteButton, homeButton, points, rocks, asteroids, coins, coinsCollected, bullets)
+        draw(player, playerPosition, playerState, elapsedTime, soundButton, muteButton, homeButton, points, rocks, asteroids, coins, coinsCollected, lives, bullets)
 
 if __name__ == "__main__":
     while True:
