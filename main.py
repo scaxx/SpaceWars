@@ -299,6 +299,96 @@ def draw(player, playerPosition, playerState, elapsedTime, soundButton, muteButt
     
     pygame.display.update()
 
+#Función: Actualizar rocas
+def updateRocks(rocks, speed, height, playerPosition, playerMask, rockMask, playerState, lives, hitTime, currentTime):
+    for rockObj in rocks[:]:
+        if rockObj["state"] == "normal":
+            rockObj["position"][1] += speed
+
+            if rockObj["position"][1] > height:
+                rocks.remove(rockObj)
+            else:
+                over = (rockObj["position"][0] - playerPosition[0], rockObj["position"][1] - playerPosition[1])
+                if playerMask.overlap(rockMask, over) and playerState == "normal":
+                    rockObj["state"] = "explosion"
+                    lives -= 1
+                    if lives == 0:
+                        playerState = "collision"
+                    else:
+                        playerState = "hit"
+                        hitTime = currentTime
+                    rockObj["destroyTime"] = currentTime
+                    explosionSound.play()
+                    break
+        elif rockObj["state"] == "explosion":
+            if currentTime - rockObj["destroyTime"] > 1000:
+                rocks.remove(rockObj)
+
+    return playerState, lives, hitTime
+
+#Función: Actualizar asteroides
+def updateAsteroids(asteroids, asteroidSpeed, height, playerPosition, playerMask, asteroidMask, playerState, lives, hitTime, currentTime):
+    for asteroidObj in asteroids[:]:
+        if asteroidObj["state"] == "normal":
+            asteroidObj["position"][1] += asteroidSpeed
+
+            if asteroidObj["position"][1] > height:
+                asteroids.remove(asteroidObj)
+            else:
+                over = (asteroidObj["position"][0] - playerPosition[0], asteroidObj["position"][1] - playerPosition[1])
+                if playerMask.overlap(asteroidMask, over) and playerState == "normal":
+                    asteroidObj["state"] = "collision"
+                    lives -= 1
+                    if lives == 0:
+                        playerState = "collision"
+                    else:
+                        playerState = "hit"
+                        hitTime = currentTime
+                    asteroidObj["destroyTime"] = currentTime
+                    explosionSound.play()
+                    break
+        elif asteroidObj["state"] == "explosion" or asteroidObj["state"] == "collision":
+            if currentTime - asteroidObj["destroyTime"] > 1000:
+                asteroids.remove(asteroidObj)
+
+    return playerState, lives, hitTime
+
+#Función: Actualizar monedas
+def upadteCoins(coins, coinSpeed, height, playerPosition, playerMask, coinMask, coinsCollected):
+    for coinObj in coins[:]:
+        coinObj["position"][1] += coinSpeed
+
+        if coinObj["position"][1] > height:
+            coins.remove(coinObj)
+        else:
+            over = (coinObj["position"][0] - playerPosition[0], coinObj["position"][1] - playerPosition[1])
+            if playerMask.overlap(coinMask, over):
+                coinsCollected += 1
+                coins.remove(coinObj)
+
+    return coinsCollected
+
+#Función: Actualizar balas
+def updateBullets(bullets, bulletSpeed, bulletMask, asteroidMask, asteroids, currentTime, points):
+    for bullet in bullets[:]:
+        bullet[1] -= bulletSpeed
+
+        if bullet[1] < 0:
+            bullets.remove(bullet)
+        else:
+            for asteroidObj in asteroids[:]:
+                over = (asteroidObj["position"][0] - bullet[0], asteroidObj["position"][1] - bullet[1])
+                if bulletMask.overlap(asteroidMask, over):
+                    bullets.remove(bullet)
+                    asteroidObj["state"] = "explosion"
+                    asteroidObj["destroyTime"] = currentTime
+                    explosionSound.play()
+                    points += 5
+                    break
+
+    return points #Revisar
+
+
 #Functión: Juego principal
 def main():
     #Para modificar variables globales
@@ -459,52 +549,13 @@ def main():
                     #coinSound.play()
 
         #Se actualizan las posiciones de las rocas
-        for rockObj in rocks[:]:
-            if rockObj["state"] == "normal":
-                rockObj["position"][1] += speed
-
-                if rockObj["position"][1] > height:
-                    rocks.remove(rockObj)
-                else:
-                    over = (rockObj["position"][0] - playerPosition[0], rockObj["position"][1] - playerPosition[1])
-                    if playerMask.overlap(rockMask, over) and playerState == "normal":
-                        rockObj["state"] = "explosion"
-                        lives -= 1
-                        if lives == 0:
-                            playerState = "collision"
-                        else:
-                            playerState = "hit"
-                            hitTime = currentTime
-                        rockObj["destroyTime"] = currentTime
-                        explosionSound.play()
-                        break
-            elif rockObj["state"] == "explosion":
-                if currentTime - rockObj["destroyTime"] > 1000:
-                    rocks.remove(rockObj)
+        playerState, lives, hitTime = updateRocks(rocks, speed, height, playerPosition, playerMask, rockMask, playerState, lives, hitTime, currentTime)
         
         #Se actualizan las posiciones de los asteroides
-        for asteroidObj in asteroids[:]:
-            if asteroidObj["state"] == "normal":
-                asteroidObj["position"][1] += asteroidSpeed
-            
-                if asteroidObj["position"][1] > height:
-                    asteroids.remove(asteroidObj)
-                else:
-                    over = (asteroidObj["position"][0] - playerPosition[0], asteroidObj["position"][1] - playerPosition[1])
-                    if playerMask.overlap(asteroidMask, over) and playerState == "normal":
-                        asteroidObj["state"] = "collision"
-                        lives -= 1
-                        if lives == 0:
-                            playerState = "collision"
-                        else:
-                            playerState = "hit"
-                            hitTime = currentTime
-                        asteroidObj["destroyTime"] = currentTime
-                        explosionSound.play()
-                        break
-            elif asteroidObj["state"] == "explosion" or asteroidObj["state"] == "collision":
-                if currentTime - asteroidObj["destroyTime"] > 1000:
-                    asteroids.remove(asteroidObj)
+        playerState, lives, hitTime = updateAsteroids(asteroids, asteroidSpeed, height, playerPosition, playerMask, asteroidMask, playerState, lives, hitTime, currentTime)
+
+        #Se actualizan las posiciones de las monedas
+        coinsCollected = upadteCoins(coins, coinSpeed, height, playerPosition, playerMask, coinMask, coinsCollected)
 
         #Se actualizan las posiciones de las balas / Explosión con asteroides
         for bulletPosition in bullets[:]:
