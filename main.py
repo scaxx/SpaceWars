@@ -76,8 +76,8 @@ specialStar = pygame.transform.scale(specialStar, (specialStarW, specialStarH)) 
 
 #Configuración de roca
 rock = pygame.image.load("assets/extras/rock.png") #Roca
-rockW = 15 #Tamaño
-rockH = 15 #Tamaño
+rockW = 20 #Tamaño
+rockH = 20 #Tamaño
 rock = pygame.transform.scale(rock, (rockW, rockH)) #Se crea la roca
 
 #Configuración de asteroide
