@@ -98,10 +98,10 @@ bulletH = 15 #Tamaño
 bullet = pygame.transform.scale(bullet, (bulletW, bulletH)) #Se crea la bala
 
 #Velocidad: General, balas, monedas y asteroides
-speed = 10 #Velocidad general
+speed = 7 #Velocidad general
 asteroidSpeed = 8 #Velocidad asteroides
-coinSpeed = 15 #Velocidad monedas
-bulletSpeed = 13 #Velocidad balas
+coinSpeed = 13 #Velocidad monedas
+bulletSpeed = 11 #Velocidad balas
 
 #Masks
 playerMask = pygame.mask.from_surface(player)
@@ -263,11 +263,11 @@ def draw(player, playerPosition, playerState, elapsedTime, soundButton, muteButt
     #Dibujar vidas y escudo
     livesBaseX = coinIconX + coinW + 10 + coinRecord.get_width() + 50
     for l in range(3):
-        lifeIconX = livesBaseX + l * (lifeW + 10)
+        lifeIconX = livesBaseX + l * (lifeW + 25)
         if l < lives:
-            myScreen.blit(life, (lifeIconX, 10))
+            myScreen.blit(life, (lifeIconX, 25))
         else:
-            myScreen.blit(emptyLife, (lifeIconX, 10))
+            myScreen.blit(emptyLife, (lifeIconX, 25))
 
     #Dibujar rocas
     for rockObj in rocks:
@@ -498,7 +498,7 @@ def main():
                         asteroidObj["destroyTime"] = currentTime
                         explosionSound.play()
                         break
-            elif asteroidObj["state"] == "explosion":
+            elif asteroidObj["state"] == "explosion" or asteroidObj["state"] == "collision":
                 if currentTime - asteroidObj["destroyTime"] > 1000:
                     asteroids.remove(asteroidObj)
 
