@@ -289,6 +289,10 @@ def draw(player, playerPosition, playerState, elapsedTime, soundButton, muteButt
 
     #Dibujar jugador
     if playerState == "normal":
+        player.set_alpha(255)
+        myScreen.blit(player, playerPosition)
+    elif playerState == "hit":
+        player.set_alpha(125)
         myScreen.blit(player, playerPosition)
     elif playerState == "collision":
         myScreen.blit(explosion1, playerPosition)
