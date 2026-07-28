@@ -100,7 +100,7 @@ bullet = pygame.transform.scale(bullet, (bulletW, bulletH)) #Se crea la bala
 #Velocidad: General, balas, monedas y asteroides
 speed = 7 #Velocidad general
 asteroidSpeed = 8 #Velocidad asteroides
-coinSpeed = 13 #Velocidad monedas
+coinSpeed = 7 #Velocidad monedas
 bulletSpeed = 11 #Velocidad balas
 
 #Masks
@@ -364,6 +364,7 @@ def upadteCoins(coins, coinSpeed, height, playerPosition, playerMask, coinMask, 
             over = (coinObj["position"][0] - playerPosition[0], coinObj["position"][1] - playerPosition[1])
             if playerMask.overlap(coinMask, over):
                 coinsCollected += 1
+                #coinSound.play()
                 coins.remove(coinObj)
 
     return coinsCollected
@@ -462,7 +463,7 @@ def main():
             rockAdd = max(200, rockAdd - 50)
             rockCount = 0
 
-        #Se agregan asteroides
+        #Se agregan asteroides y monedas
         if asteroidCount > asteroidAdd:
             asteroidX = random.randint(0, width - asteroidW)
             asteroidY = -asteroidH
@@ -535,19 +536,6 @@ def main():
             bullets.append([bulletX, bulletY])
             lastShootTime = currentTime
 
-        #Se actualizan las posiciones de las monedas
-        for coinObj in coins[:]:
-            coinObj["position"][1] += coinSpeed
-
-            if coinObj["position"][1] > height:
-                coins.remove(coinObj)
-            else:
-                over = (coinObj["position"][0] - playerPosition[0], coinObj["position"][1] - playerPosition[1])
-                if playerMask.overlap(coinMask, over):
-                    coinsCollected += 1
-                    coins.remove(coinObj)
-                    #coinSound.play()
-
         #Se actualizan las posiciones de las rocas
         playerState, lives, hitTime = updateRocks(rocks, speed, height, playerPosition, playerMask, rockMask, playerState, lives, hitTime, currentTime)
         
@@ -558,22 +546,7 @@ def main():
         coinsCollected = upadteCoins(coins, coinSpeed, height, playerPosition, playerMask, coinMask, coinsCollected)
 
         #Se actualizan las posiciones de las balas / Explosión con asteroides
-        for bulletPosition in bullets[:]:
-            bulletPosition[1] -= bulletSpeed
-            
-            if bulletPosition[1] < 0:
-                bullets.remove(bulletPosition)
-            else:
-                for asteroidObj in asteroids[:]:
-                    if asteroidObj["state"] == "normal":
-                        over = (asteroidObj["position"][0] - bulletPosition[0], asteroidObj["position"][1] - bulletPosition[1])
-                        if bulletMask.overlap(asteroidMask, over):
-                            bullets.remove(bulletPosition)
-                            asteroidObj["state"] = "explosion"
-                            asteroidObj["destroyTime"] = currentTime
-                            explosionSound.play()
-                            points += 5
-                            break
+        points = updateBullets(bullets, bulletSpeed, bulletMask, asteroidMask, asteroids, currentTime, points)
 
         #Se revierte el estado "hit" del jugador después de 3 segundos
         if playerState == "hit":
