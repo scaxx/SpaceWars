@@ -354,7 +354,7 @@ def updateAsteroids(asteroids, asteroidSpeed, height, playerPosition, playerMask
     return playerState, lives, hitTime
 
 #Función: Actualizar monedas
-def upadteCoins(coins, coinSpeed, height, playerPosition, playerMask, coinMask, coinsCollected):
+def updateCoins(coins, coinSpeed, height, playerPosition, playerMask, coinMask, coinsCollected):
     for coinObj in coins[:]:
         coinObj["position"][1] += coinSpeed
 
@@ -378,16 +378,17 @@ def updateBullets(bullets, bulletSpeed, bulletMask, asteroidMask, asteroids, cur
             bullets.remove(bullet)
         else:
             for asteroidObj in asteroids[:]:
-                over = (asteroidObj["position"][0] - bullet[0], asteroidObj["position"][1] - bullet[1])
-                if bulletMask.overlap(asteroidMask, over):
-                    bullets.remove(bullet)
-                    asteroidObj["state"] = "explosion"
-                    asteroidObj["destroyTime"] = currentTime
-                    explosionSound.play()
-                    points += 5
-                    break
+                if asteroidObj["state"] == "normal":
+                    over = (asteroidObj["position"][0] - bullet[0], asteroidObj["position"][1] - bullet[1])
+                    if bulletMask.overlap(asteroidMask, over):
+                        bullets.remove(bullet)
+                        asteroidObj["state"] = "explosion"
+                        asteroidObj["destroyTime"] = currentTime
+                        explosionSound.play()
+                        points += 5
+                        break
 
-    return points #Revisar
+    return points
 
 
 #Functión: Juego principal
@@ -543,7 +544,7 @@ def main():
         playerState, lives, hitTime = updateAsteroids(asteroids, asteroidSpeed, height, playerPosition, playerMask, asteroidMask, playerState, lives, hitTime, currentTime)
 
         #Se actualizan las posiciones de las monedas
-        coinsCollected = upadteCoins(coins, coinSpeed, height, playerPosition, playerMask, coinMask, coinsCollected)
+        coinsCollected = updateCoins(coins, coinSpeed, height, playerPosition, playerMask, coinMask, coinsCollected)
 
         #Se actualizan las posiciones de las balas / Explosión con asteroides
         points = updateBullets(bullets, bulletSpeed, bulletMask, asteroidMask, asteroids, currentTime, points)
