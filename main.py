@@ -390,6 +390,24 @@ def updateBullets(bullets, bulletSpeed, bulletMask, asteroidMask, asteroids, cur
 
     return points
 
+#Función: Agregar rocas
+def spawnRocks(rockCount, rockAdd, width, rockW, rockH, rocks):
+    if rockCount > rockAdd:
+        numRocks = random.randint(1, 8)
+
+        for _ in range(numRocks):
+            rockX = random.randint(0, width - rockW)
+            rockY = -rockH
+            rocks.append({
+                "position": [rockX, rockY],
+                "image": rock,
+                "state": "normal",
+                "destroyTime": None
+            })
+        rockAdd = max(200, rockAdd - 50)
+        rockCount = 0
+
+    return rockCount, rockAdd
 
 #Functión: Juego principal
 def main():
@@ -449,20 +467,7 @@ def main():
             playerHit = True
 
         #Se agregan rocas
-        if rockCount > rockAdd:
-            numRocks = random.randint(1, 8)
-
-            for _ in range(numRocks):
-                rockX = random.randint(0, width - rockW)
-                rockY = -rockH
-                rocks.append({
-                    "position": [rockX, rockY], 
-                    "image": rock, 
-                    "state": "normal", 
-                    "destroyTime": None
-                })
-            rockAdd = max(200, rockAdd - 50)
-            rockCount = 0
+        rockCount, rockAdd = spawnRocks(rockCount, rockAdd, width, rockW, rockH, rocks)
 
         #Se agregan asteroides y monedas
         if asteroidCount > asteroidAdd:
