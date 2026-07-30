@@ -436,6 +436,24 @@ def spawnAsteroidsAndCoins(asteroidCount, asteroidAdd, width, asteroidW, asteroi
 
     return asteroidCount, asteroidAdd, asteroidsSpawned
 
+#Función: Menú Game Over
+def menuGameOver(playerHit, font, width, height, elapsedTime, points, coinsCollected):
+    if playerHit:
+        gameOver = font.render("Game Over", 2, "white")
+        myScreen.blit(gameOver, (width / 2 - gameOver.get_width() / 2, height / 2 - gameOver.get_height() / 2))
+        timeRecord = font.render(f"Time: {round(elapsedTime)} s", 1, "white")
+        myScreen.blit(timeRecord, (width / 2 - timeRecord.get_width() / 2, height / 2 - gameOver.get_height() / 2 + 50))
+        pointsRecord = font.render(f"Points: {points}", 1, "white")
+        myScreen.blit(pointsRecord, (width / 2 - pointsRecord.get_width() / 2, height / 2 - gameOver.get_height() / 2 + 100))
+        coinsRecord = font.render(f"Coins Collected: {coinsCollected}", 1, "white")
+        myScreen.blit(coinsRecord, (width / 2 - coinsRecord.get_width() / 2, height / 2 - gameOver.get_height() / 2 + 150))
+        pygame.display.update()
+        pygame.time.delay(3000)
+
+        return True
+
+    return False
+
 #Functión: Juego principal
 def main():
     #Para modificar variables globales
@@ -566,18 +584,8 @@ def main():
             if currentTime - hitTime > 3000:
                 playerState = "normal"
         
-        #Explosión de la nave: El jugador pierde el juego
-        if playerHit:
-            gameOver = font.render("Game Over", 2, "white")
-            myScreen.blit(gameOver, (width / 2 - gameOver.get_width() / 2, height / 2 - gameOver.get_height() / 2))
-            timeRecord = font.render(f"Time: {round(elapsedTime)} s", 1, "white")
-            myScreen.blit(timeRecord, (width / 2 - timeRecord.get_width() / 2, height / 2 - gameOver.get_height() / 2 + 50))
-            pointsRecord = font.render(f"Points: {points}", 1, "white")
-            myScreen.blit(pointsRecord, (width / 2 - pointsRecord.get_width() / 2, height / 2 - gameOver.get_height() / 2 + 100))
-            coinsRecord = font.render(f"Coins Collected: {coinsCollected}", 1, "white")
-            myScreen.blit(coinsRecord, (width / 2 - coinsRecord.get_width() / 2, height / 2 - gameOver.get_height() / 2 + 150))
-            pygame.display.update()
-            pygame.time.delay(3000)
+        #El jugador pierde el juego, se despliega el menú de Game Over
+        if menuGameOver(playerHit, font, width, height, elapsedTime, points, coinsCollected):
             return
 
         draw(player, playerPosition, playerState, elapsedTime, soundButton, muteButton, homeButton, points, rocks, asteroids, coins, coinsCollected, lives, bullets)
