@@ -455,7 +455,14 @@ def menuGameOver(playerHit, font, width, height, elapsedTime, points, coinsColle
     return False
 
 #Función: Manejo del estado del jugador
-#def handlePlayerState(playerHit, playerState):
+def handlePlayerState(playerHit, playerState, currentTime, hitTime):
+    if playerState == "hit":
+        if currentTime - hitTime > 3000:
+            playerState = "normal"
+    elif playerState == "collision":
+        playerHit = True
+
+    return playerHit, playerState
 
 #Functión: Juego principal
 def main():
@@ -507,12 +514,6 @@ def main():
         rockCount += elapsedMS
         asteroidCount += elapsedMS
         elapsedTime = time.time() - startTime
-
-        #Si el jugador pierde
-        if playerState == "collision":
-            pygame.time.delay(2000)
-            myScreen.blit(back, (0, 0))
-            playerHit = True
 
         #Se agregan rocas
         rockCount, rockAdd = spawnRocks(rockCount, rockAdd, width, rockW, rockH, rocks)
@@ -582,14 +583,16 @@ def main():
         #Se actualizan las posiciones de las balas / Explosión con asteroides
         points = updateBullets(bullets, bulletSpeed, bulletMask, asteroidMask, asteroids, currentTime, points)
 
-        #Se revierte el estado "hit" del jugador después de 3 segundos
-        if playerState == "hit":
-            if currentTime - hitTime > 3000:
-                playerState = "normal"
-        
-        #El jugador pierde el juego, se despliega el menú de Game Over
-        if menuGameOver(playerHit, font, width, height, elapsedTime, points, coinsCollected):
-            return
+        #Manejo de estado del jugador
+        playerHit, playerState = handlePlayerState(playerHit, playerState, currentTime, hitTime)
+
+        #Si el jugador pierde
+        if playerHit:
+            pygame.time.delay(1000)
+            myScreen.blit(back, (0, 0))
+            #El jugador pierde el juego, se despliega el menú de Game Over
+            if menuGameOver(playerHit, font, width, height, elapsedTime, points, coinsCollected):
+                return        
 
         draw(player, playerPosition, playerState, elapsedTime, soundButton, muteButton, homeButton, points, rocks, asteroids, coins, coinsCollected, lives, bullets)
 
