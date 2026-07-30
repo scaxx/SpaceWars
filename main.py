@@ -409,6 +409,33 @@ def spawnRocks(rockCount, rockAdd, width, rockW, rockH, rocks):
 
     return rockCount, rockAdd
 
+#Función: Agregar asteroides y monedas
+def spawnAsteroidsAndCoins(asteroidCount, asteroidAdd, width, asteroidW, asteroidH, asteroidsSpawned, asteroids, coinW, coinH, coins):
+    if asteroidCount > asteroidAdd:
+        asteroidX = random.randint(0, width - asteroidW)
+        asteroidY = -asteroidH
+        asteroids.append({
+            "position": [asteroidX, asteroidY],
+            "image": asteroid,
+            "state": "normal",
+            "destroyTime": None
+        })
+        asteroidsSpawned += 1
+        if asteroidsSpawned % 5 == 0 and asteroidsSpawned != 0:
+            coinX = random.randint(0, width - coinW)
+            coinY = -coinH
+            coins.append({
+                "position": [coinX, coinY],
+                "image": coin,
+                "state": "normal",
+                "destroyTime": None
+            })
+
+        asteroidAdd = random.uniform(3000, 5000)
+        asteroidCount = 0
+
+    return asteroidCount, asteroidAdd, asteroidsSpawned
+
 #Functión: Juego principal
 def main():
     #Para modificar variables globales
@@ -470,27 +497,7 @@ def main():
         rockCount, rockAdd = spawnRocks(rockCount, rockAdd, width, rockW, rockH, rocks)
 
         #Se agregan asteroides y monedas
-        if asteroidCount > asteroidAdd:
-            asteroidX = random.randint(0, width - asteroidW)
-            asteroidY = -asteroidH
-            asteroids.append({
-                "position": [asteroidX, asteroidY],
-                "image": asteroid,
-                "state": "normal",
-                "destroyTime": None
-            })
-            asteroidsSpawned += 1
-            if asteroidsSpawned % 5 == 0 and asteroidsSpawned != 0:
-                coinX = random.randint(0, width - coinW)
-                coinY = -coinH
-                coins.append({
-                    "position": [coinX, coinY],
-                    "image": coin,
-                    "state": "normal",
-                    "destroyTime": None
-                })
-            asteroidAdd = random.uniform(3000, 5000)
-            asteroidCount = 0
+        asteroidCount, asteroidAdd, asteroidsSpawned = spawnAsteroidsAndCoins(asteroidCount, asteroidAdd, width, asteroidW, asteroidH, asteroidsSpawned, asteroids, coinW, coinH, coins)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
