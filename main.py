@@ -454,6 +454,9 @@ def menuGameOver(playerHit, font, width, height, elapsedTime, points, coinsColle
 
     return False
 
+#Función: Manejo del estado del jugador
+#def handlePlayerState(playerHit, playerState):
+
 #Functión: Juego principal
 def main():
     #Para modificar variables globales
