@@ -586,6 +586,8 @@ def main():
         #Manejo de estado del jugador
         playerHit, playerState = handlePlayerState(playerHit, playerState, currentTime, hitTime)
 
+        draw(player, playerPosition, playerState, elapsedTime, soundButton, muteButton, homeButton, points, rocks, asteroids, coins, coinsCollected, lives, bullets)
+
         #Si el jugador pierde
         if playerHit:
             pygame.time.delay(1000)
@@ -593,8 +595,6 @@ def main():
             #El jugador pierde el juego, se despliega el menú de Game Over
             if menuGameOver(playerHit, font, width, height, elapsedTime, points, coinsCollected):
                 return        
-
-        draw(player, playerPosition, playerState, elapsedTime, soundButton, muteButton, homeButton, points, rocks, asteroids, coins, coinsCollected, lives, bullets)
 
 if __name__ == "__main__":
     while True:
