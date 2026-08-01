@@ -497,6 +497,30 @@ def handleEvents(run, homeButtonX, buttonY, buttonWidth, musicMuted, effectsMute
 
     return run, goHome, musicMuted, effectsMuted
 
+#Función: Controladores
+def handleControllers(playerPosition, speed, width, height, playerW, playerH, currentTime, lastShootTime, shootInterval, bullets, bulletW, bulletH):
+    keys = pygame.key.get_pressed()
+
+    if (keys[pygame.K_LEFT] or keys[pygame.K_a]) and playerPosition[0] - speed >= 0:
+        playerPosition[0] -= speed
+
+    if(keys[pygame.K_RIGHT] or keys[pygame.K_d]) and playerPosition[0] + speed <= width - playerW:
+        playerPosition[0] += speed
+
+    if (keys[pygame.K_UP] or keys[pygame.K_w]) and playerPosition[1] - speed >= 0:
+        playerPosition[1] -= speed
+
+    if(keys[pygame.K_DOWN] or keys[pygame.K_s]) and playerPosition[1] + speed <= height - playerH:
+        playerPosition[1] += speed
+
+    if keys[pygame.K_SPACE] and currentTime - lastShootTime > shootInterval:
+        gunshotSound.play()
+        bulletX = playerPosition[0] + playerW // 2 - bulletW // 2
+        bulletY = playerPosition[1] - bulletH
+        bullets.append([bulletX, bulletY])
+        lastShootTime = currentTime
+
+    return lastShootTime
 
 #Functión: Juego principal
 def main():
@@ -562,20 +586,7 @@ def main():
             return
 
         #Controladores de juego
-        keys = pygame.key.get_pressed()
-
-        if keys[pygame.K_LEFT] and playerPosition[0] - speed >= 0:
-            playerPosition[0] -= speed
-
-        if keys[pygame.K_RIGHT] and playerPosition[0] + speed <= width - playerW:
-            playerPosition[0] += speed
-
-        if keys[pygame.K_SPACE] and currentTime - lastShootTime > shootInterval:
-            gunshotSound.play()
-            bulletX = playerPosition[0] + playerW // 2 - bulletW // 2
-            bulletY = playerPosition[1] - bulletH
-            bullets.append([bulletX, bulletY])
-            lastShootTime = currentTime
+        lastShootTime = handleControllers(playerPosition, speed, width, height, playerW, playerH, currentTime, lastShootTime, shootInterval, bullets, bulletW, bulletH)
 
         #Se actualizan las posiciones de las rocas
         playerState, lives, hitTime = updateRocks(rocks, speed, height, playerPosition, playerMask, rockMask, playerState, lives, hitTime, currentTime)
