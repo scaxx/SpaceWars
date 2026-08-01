@@ -24,7 +24,7 @@ pygame.mixer.music.play(-1)
 #Efectos de sonido
 explosionSound = pygame.mixer.Sound("assets/sound/explosion.mp3") #Explosión
 gunshotSound = pygame.mixer.Sound("assets/sound/plasma-gunshot.mp3") #Disparo
-#coinSound = pygame.mixer.Sound("assets/sound/coin.mp3") #Moneda
+coinSound = pygame.mixer.Sound("assets/sound/coin.mp3") #Moneda
 selected = pygame.mixer.Sound("assets/sound/selected.mp3") #Seleccionado
 
 #Mutear música y efectos
@@ -98,7 +98,7 @@ bulletH = 15 #Tamaño
 bullet = pygame.transform.scale(bullet, (bulletW, bulletH)) #Se crea la bala
 
 #Velocidad: General, balas, monedas y asteroides
-speed = 7 #Velocidad general
+speed = 6 #Velocidad general
 asteroidSpeed = 8 #Velocidad asteroides
 coinSpeed = 7 #Velocidad monedas
 bulletSpeed = 11 #Velocidad balas
@@ -220,7 +220,7 @@ def optionsMenu():
                     selected.set_volume(0 if effectsMuted else 0.3)
                     explosionSound.set_volume(0 if effectsMuted else 0.3)
                     gunshotSound.set_volume(0 if effectsMuted else 0.3)
-                    #coinSound.set_volume(0 if effectsMuted else 0.3)
+                    coinSound.set_volume(0 if effectsMuted else 0.3)
                     selected.play()
                 elif goBackRect.collidepoint(event.pos):
                     selected.play()
@@ -364,7 +364,7 @@ def updateCoins(coins, coinSpeed, height, playerPosition, playerMask, coinMask, 
             over = (coinObj["position"][0] - playerPosition[0], coinObj["position"][1] - playerPosition[1])
             if playerMask.overlap(coinMask, over):
                 coinsCollected += 1
-                #coinSound.play()
+                coinSound.play()
                 coins.remove(coinObj)
 
     return coinsCollected
