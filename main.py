@@ -25,6 +25,7 @@ pygame.mixer.music.play(-1)
 explosionSound = pygame.mixer.Sound("assets/sound/explosion.mp3") #Explosión
 gunshotSound = pygame.mixer.Sound("assets/sound/plasma-gunshot.mp3") #Disparo
 coinSound = pygame.mixer.Sound("assets/sound/coin.mp3") #Moneda
+#shieldSound = pygame.mixer.Sound("assets/sound/shield.mp3") #Escudo
 selected = pygame.mixer.Sound("assets/sound/selected.mp3") #Seleccionado
 
 #Mutear música y efectos
@@ -100,6 +101,7 @@ bullet = pygame.transform.scale(bullet, (bulletW, bulletH)) #Se crea la bala
 #Velocidad: General, balas, monedas y asteroides
 speed = 6 #Velocidad general
 asteroidSpeed = 8 #Velocidad asteroides
+shieldSpeed = 7 #Velocidad escudos
 coinSpeed = 7 #Velocidad monedas
 bulletSpeed = 11 #Velocidad balas
 
@@ -108,6 +110,7 @@ playerMask = pygame.mask.from_surface(player)
 coinMask = pygame.mask.from_surface(coin)
 rockMask = pygame.mask.from_surface(rock)
 asteroidMask = pygame.mask.from_surface(asteroid)
+shieldMask = pygame.mask.from_surface(shield)
 bulletMask = pygame.mask.from_surface(bullet)
 
 #Función: Menu
@@ -390,6 +393,23 @@ def updateBullets(bullets, bulletSpeed, bulletMask, asteroidMask, asteroids, cur
 
     return points
 
+#Función: Actualizar escudos
+def updateShields(shields, shieldSpeed, shieldActive, shieldTime, shieldMask, currentTime, height, playerPosition, playerMask):
+    for shieldObj in shields[:]:
+        shieldObj["position"][1] += shieldSpeed
+
+        if shieldObj["position"][1] > height:
+            shields.remove(shieldObj)
+        else:
+            over = (shieldObj["position"][0] - playerPosition[0], shieldObj["position"][1] - playerPosition[1])
+            if playerMask.overlap(shieldMask, over):
+                shieldActive = True
+                shieldTime = currentTime
+                #shieldSound.play()
+                shields.remove(shieldObj)
+
+    return shieldActive, shieldTime
+
 #Función: Agregar rocas
 def spawnRocks(rockCount, rockAdd, width, rockW, rockH, rocks):
     if rockCount > rockAdd:
@@ -435,6 +455,22 @@ def spawnAsteroidsAndCoins(asteroidCount, asteroidAdd, width, asteroidW, asteroi
         asteroidCount = 0
 
     return asteroidCount, asteroidAdd, asteroidsSpawned
+
+#Función: Agregar escudos
+def spawnShields(shieldCount, shieldAdd, width, shieldW, shieldH, shields):
+    if shieldCount > shieldAdd:
+        if random.random() < 0.15:
+            shieldX = random.randint(0, width - shieldW)
+            shieldY = -shieldH
+            shields.append({
+                "position": [shieldX, shieldY],
+                "image": shield,
+                "state": "normal",
+                "destroyTime": None
+            })
+        shieldCount = 0
+
+    return shieldCount
 
 #Función: Menú Game Over
 def menuGameOver(playerHit, font, width, height, elapsedTime, points, coinsCollected):
@@ -552,17 +588,24 @@ def main():
     asteroids = []
 
     #Manejo de monedas
-    coins = []
     coinsCollected = 0
+    coins = []
 
     #Manejo de vidas
     lives = 3
     hitTime = None
 
+    #Manejo de escudo
+    shieldActive = False
+    shieldTime = None
+    shieldAdd = 5000
+    shieldCount = 0
+    shields = []
+    
     #Manejo de balas
-    bullets = []
     shootInterval = 1000 
     lastShootTime = 0
+    bullets = []
 
     #Comienza el juego
     while run:
@@ -572,6 +615,7 @@ def main():
         currentTime = pygame.time.get_ticks()
         rockCount += elapsedMS
         asteroidCount += elapsedMS
+        shieldCount += elapsedMS
         elapsedTime = time.time() - startTime
 
         #Se agregan rocas
@@ -579,6 +623,9 @@ def main():
 
         #Se agregan asteroides y monedas
         asteroidCount, asteroidAdd, asteroidsSpawned = spawnAsteroidsAndCoins(asteroidCount, asteroidAdd, width, asteroidW, asteroidH, asteroidsSpawned, asteroids, coinW, coinH, coins)
+
+        #Se agregan escudos
+        shieldCount = spawnShields(shieldCount, shieldAdd, width, shieldW, shieldH, shields)
 
         #Manejo de eventos
         run, goHome, musicMuted, effectsMuted = handleEvents(run, homeButtonX, buttonY, buttonWidth, musicMuted, effectsMuted)
@@ -599,6 +646,9 @@ def main():
 
         #Se actualizan las posiciones de las balas / Explosión con asteroides
         points = updateBullets(bullets, bulletSpeed, bulletMask, asteroidMask, asteroids, currentTime, points)
+
+        #Se actualizan las posiciones de los escudos
+        shieldActive, shieldTime = updateShields(shields, shieldSpeed, shieldActive, shieldTime, shieldMask, currentTime, height, playerPosition, playerMask)
 
         #Manejo de estado del jugador
         playerHit, playerState = handlePlayerState(playerHit, playerState, currentTime, hitTime)
