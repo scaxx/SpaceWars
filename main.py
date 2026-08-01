@@ -464,6 +464,40 @@ def handlePlayerState(playerHit, playerState, currentTime, hitTime):
 
     return playerHit, playerState
 
+#Función: Manejo de eventos
+def handleEvents(run, homeButtonX, buttonY, buttonWidth, musicMuted, effectsMuted):
+    goHome = False
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+            break
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            mousePos = pygame.mouse.get_pos()
+            if homeButton.get_rect(topleft = (homeButtonX, buttonY)).collidepoint(mousePos):
+                selected.play()
+                goHome = True
+
+            if muteButton.get_rect(topleft = (homeButtonX - buttonWidth - 10, buttonY)).collidepoint(mousePos):
+                if musicMuted:
+                    musicMuted = False
+                    effectsMuted = False
+                    pygame.mixer.music.set_volume(0.3)
+                    selected.set_volume(0.3)
+                    explosionSound.set_volume(0.3)
+                    gunshotSound.set_volume(0.3)
+                    selected.play()
+                else:
+                    musicMuted = True
+                    effectsMuted = True
+                    pygame.mixer.music.set_volume(0)
+                    selected.set_volume(0)
+                    explosionSound.set_volume(0)
+                    gunshotSound.set_volume(0)
+                    selected.play()
+
+    return run, goHome, musicMuted, effectsMuted
+
+
 #Functión: Juego principal
 def main():
     #Para modificar variables globales
@@ -471,6 +505,7 @@ def main():
 
     #El juego está corriendo y el jugador no ha sido golpeado
     run = True
+    goHome = False
     playerHit = False
     playerState = "normal"
     playerPosition = [width // 2 - playerW, height - playerH - 10]
@@ -521,39 +556,10 @@ def main():
         #Se agregan asteroides y monedas
         asteroidCount, asteroidAdd, asteroidsSpawned = spawnAsteroidsAndCoins(asteroidCount, asteroidAdd, width, asteroidW, asteroidH, asteroidsSpawned, asteroids, coinW, coinH, coins)
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
-                break
-            #Se chequean los clicks del mouse para manejar los eventos
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                mousePos = pygame.mouse.get_pos()
-                #Cliquea el botón home
-                if homeButton.get_rect(topleft=(homeButtonX, buttonY)).collidepoint(mousePos):
-                    selected.play()
-                    return
-                #Cliquea el botón mutear
-                if muteButton.get_rect(topleft=(homeButtonX - buttonWidth - 10, buttonY)).collidepoint(mousePos):
-                    if musicMuted:
-                        #Desmutear
-                        musicMuted = False
-                        effectsMuted = False
-                        pygame.mixer.music.set_volume(0.3)
-                        selected.set_volume(0.3)
-                        explosionSound.set_volume(0.3)
-                        gunshotSound.set_volume(0.3)
-                        #coinSound.set_volume(0.3)
-                        selected.play()
-                    else:
-                        #Mutear
-                        musicMuted = True
-                        effectsMuted = True
-                        pygame.mixer.music.set_volume(0)
-                        selected.set_volume(0)
-                        explosionSound.set_volume(0)
-                        gunshotSound.set_volume(0)
-                        #coinSound.set_volume(0)
-                        selected.play()
+        #Manejo de eventos
+        run, goHome, musicMuted, effectsMuted = handleEvents(run, homeButtonX, buttonY, buttonWidth, musicMuted, effectsMuted)
+        if goHome:
+            return
 
         #Controladores de juego
         keys = pygame.key.get_pressed()
