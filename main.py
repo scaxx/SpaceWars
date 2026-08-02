@@ -56,8 +56,8 @@ coin = pygame.transform.scale(coin, (coinW, coinH)) #Se crea la moneda
 
 #Configuración de escudo
 shield = pygame.image.load("assets/extras/shield.png") #Escudo
-shieldW = 40 #Tamaño
-shieldH = 40 #Tamaño
+shieldW = 70 #Tamaño
+shieldH = 70 #Tamaño
 shield = pygame.transform.scale(shield, (shieldW, shieldH)) #Se crea la escudo
 
 #Configuración de vida
@@ -233,7 +233,7 @@ def optionsMenu():
         pygame.time.delay(100)
 
 #Función: Dibujar objetos en la pantalla
-def draw(player, playerPosition, playerState, elapsedTime, soundButton, muteButton, homeButton, points, rocks, asteroids, coins, coinsCollected, lives, bullets):
+def draw(player, playerPosition, playerState, elapsedTime, soundButton, muteButton, homeButton, points, rocks, asteroids, coins, coinsCollected, shieldActive, lives, bullets, shields):
     myScreen.blit(back, (0, 0))
 
     #Dibujar tiempo
@@ -263,7 +263,7 @@ def draw(player, playerPosition, playerState, elapsedTime, soundButton, muteButt
     coinRecord = font.render(f"{coinsCollected}", 1, "white")
     myScreen.blit(coinRecord, (coinIconX + coinW + 10, 10))
 
-    #Dibujar vidas y escudo
+    #Dibujar vidas
     livesBaseX = coinIconX + coinW + 10 + coinRecord.get_width() + 50
     for l in range(3):
         lifeIconX = livesBaseX + l * (lifeW + 25)
@@ -286,6 +286,10 @@ def draw(player, playerPosition, playerState, elapsedTime, soundButton, muteButt
         elif asteroidObj["state"] == "explosion" or asteroidObj["state"] == "collision":
             myScreen.blit(explosion1, asteroidObj["position"])
 
+    #Dibujar escudos
+    for shieldPosition in shields:
+        myScreen.blit(shield, shieldPosition)
+
     #Dibujar balas
     for bulletPosition in bullets:
         myScreen.blit(bullet, bulletPosition)
@@ -299,11 +303,16 @@ def draw(player, playerPosition, playerState, elapsedTime, soundButton, muteButt
         myScreen.blit(player, playerPosition)
     elif playerState == "collision":
         myScreen.blit(explosion1, playerPosition)
+
+    #Dibujar el escudo sobre la nave
+    if shieldActive:
+        shield.set_alpha(150)
+        myScreen.blit(shield, playerPosition)
     
     pygame.display.update()
 
 #Función: Actualizar rocas
-def updateRocks(rocks, speed, height, playerPosition, playerMask, rockMask, playerState, lives, hitTime, currentTime):
+def updateRocks(rocks, speed, height, playerPosition, playerMask, rockMask, playerState, shieldActive, lives, hitTime, currentTime):
     for rockObj in rocks[:]:
         if rockObj["state"] == "normal":
             rockObj["position"][1] += speed
@@ -312,7 +321,7 @@ def updateRocks(rocks, speed, height, playerPosition, playerMask, rockMask, play
                 rocks.remove(rockObj)
             else:
                 over = (rockObj["position"][0] - playerPosition[0], rockObj["position"][1] - playerPosition[1])
-                if playerMask.overlap(rockMask, over) and playerState == "normal":
+                if playerMask.overlap(rockMask, over) and playerState == "normal" and shieldActive == False:
                     rockObj["state"] = "explosion"
                     lives -= 1
                     if lives == 0:
@@ -330,7 +339,7 @@ def updateRocks(rocks, speed, height, playerPosition, playerMask, rockMask, play
     return playerState, lives, hitTime
 
 #Función: Actualizar asteroides
-def updateAsteroids(asteroids, asteroidSpeed, height, playerPosition, playerMask, asteroidMask, playerState, lives, hitTime, currentTime):
+def updateAsteroids(asteroids, asteroidSpeed, height, playerPosition, playerMask, asteroidMask, playerState, shieldActive, lives, hitTime, currentTime):
     for asteroidObj in asteroids[:]:
         if asteroidObj["state"] == "normal":
             asteroidObj["position"][1] += asteroidSpeed
@@ -339,7 +348,7 @@ def updateAsteroids(asteroids, asteroidSpeed, height, playerPosition, playerMask
                 asteroids.remove(asteroidObj)
             else:
                 over = (asteroidObj["position"][0] - playerPosition[0], asteroidObj["position"][1] - playerPosition[1])
-                if playerMask.overlap(asteroidMask, over) and playerState == "normal":
+                if playerMask.overlap(asteroidMask, over) and playerState == "normal" and shieldActive == False:
                     asteroidObj["state"] = "collision"
                     lives -= 1
                     if lives == 0:
@@ -558,6 +567,13 @@ def handleControllers(playerPosition, speed, width, height, playerW, playerH, cu
 
     return lastShootTime
 
+#Función: Manejo de escudo
+def handleShields(shieldActive, shieldTime, currentTime):
+    if shieldActive:
+        if currentTime - shieldTime > 5000:
+            shieldActive = False
+    return shieldActive
+
 #Functión: Juego principal
 def main():
     #Para modificar variables globales
@@ -636,10 +652,10 @@ def main():
         lastShootTime = handleControllers(playerPosition, speed, width, height, playerW, playerH, currentTime, lastShootTime, shootInterval, bullets, bulletW, bulletH)
 
         #Se actualizan las posiciones de las rocas
-        playerState, lives, hitTime = updateRocks(rocks, speed, height, playerPosition, playerMask, rockMask, playerState, lives, hitTime, currentTime)
+        playerState, lives, hitTime = updateRocks(rocks, speed, height, playerPosition, playerMask, rockMask, playerState, shieldActive, lives, hitTime, currentTime)
         
         #Se actualizan las posiciones de los asteroides
-        playerState, lives, hitTime = updateAsteroids(asteroids, asteroidSpeed, height, playerPosition, playerMask, asteroidMask, playerState, lives, hitTime, currentTime)
+        playerState, lives, hitTime = updateAsteroids(asteroids, asteroidSpeed, height, playerPosition, playerMask, asteroidMask, playerState, shieldActive, lives, hitTime, currentTime)
 
         #Se actualizan las posiciones de las monedas
         coinsCollected = updateCoins(coins, coinSpeed, height, playerPosition, playerMask, coinMask, coinsCollected)
@@ -653,7 +669,11 @@ def main():
         #Manejo de estado del jugador
         playerHit, playerState = handlePlayerState(playerHit, playerState, currentTime, hitTime)
 
-        draw(player, playerPosition, playerState, elapsedTime, soundButton, muteButton, homeButton, points, rocks, asteroids, coins, coinsCollected, lives, bullets)
+        #Manejo de escudos
+        shieldActive = handleShields(shieldActive, shieldTime, currentTime)
+        
+        #Dibujamos
+        draw(player, playerPosition, playerState, elapsedTime, soundButton, muteButton, homeButton, points, rocks, asteroids, coins, coinsCollected, shieldActive, lives, bullets, shields)
 
         #Si el jugador pierde
         if playerHit:
