@@ -529,6 +529,8 @@ def handleEvents(run, homeButtonX, buttonY, buttonWidth, musicMuted, effectsMute
                     effectsMuted = False
                     pygame.mixer.music.set_volume(0.3)
                     selected.set_volume(0.3)
+                    coinSound.set_volume(0.3)
+                    #shieldSound.set_volume(0.3)
                     explosionSound.set_volume(0.3)
                     gunshotSound.set_volume(0.3)
                     selected.play()
@@ -537,6 +539,8 @@ def handleEvents(run, homeButtonX, buttonY, buttonWidth, musicMuted, effectsMute
                     effectsMuted = True
                     pygame.mixer.music.set_volume(0)
                     selected.set_volume(0)
+                    coinSound.set_volume(0)
+                    #shieldSound.set_volume(0)
                     explosionSound.set_volume(0)
                     gunshotSound.set_volume(0)
                     selected.play()
