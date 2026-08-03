@@ -287,8 +287,8 @@ def draw(player, playerPosition, playerState, elapsedTime, soundButton, muteButt
             myScreen.blit(explosion1, asteroidObj["position"])
 
     #Dibujar escudos
-    for shieldPosition in shields:
-        myScreen.blit(shield, shieldPosition)
+    for shieldObj in shields:
+        myScreen.blit(shieldObj["image"], shieldObj["position"])
 
     #Dibujar balas
     for bulletPosition in bullets:
@@ -307,7 +307,8 @@ def draw(player, playerPosition, playerState, elapsedTime, soundButton, muteButt
     #Dibujar el escudo sobre la nave
     if shieldActive:
         shield.set_alpha(150)
-        myScreen.blit(shield, playerPosition)
+        for shieldObj in shields:
+            myScreen.blit(shieldObj["image"], shieldObj["position"])
     
     pygame.display.update()
 
