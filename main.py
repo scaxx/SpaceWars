@@ -13,7 +13,7 @@ pygame.display.set_caption("Space Wars") #Se muestra el nombre del juego
 
 #Configuración de fuentes y fondo
 font = pygame.font.Font("assets/fonts/Silkscreen-Bold.ttf", 35) #Fuente
-back = pygame.transform.scale(pygame.image.load("assets/background3.jpeg"), (width, height)) #Fondo
+back = pygame.transform.scale(pygame.image.load("assets/background5.jpeg"), (width, height)) #Fondo
 icon = pygame.image.load("assets/extras/asteroid.png") #Ícono del juego
 pygame.display.set_icon(icon) #Se muestra el ícono
 
