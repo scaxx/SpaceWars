@@ -13,7 +13,7 @@ pygame.display.set_caption("Space Wars") #Se muestra el nombre del juego
 
 #Configuración de fuentes y fondo
 font = pygame.font.Font("assets/fonts/Silkscreen-Bold.ttf", 35) #Fuente
-back = pygame.transform.scale(pygame.image.load("assets/background.jpeg"), (width, height)) #Fondo
+back = pygame.transform.scale(pygame.image.load("assets/background3.jpeg"), (width, height)) #Fondo
 icon = pygame.image.load("assets/extras/asteroid.png") #Ícono del juego
 pygame.display.set_icon(icon) #Se muestra el ícono
 
@@ -25,7 +25,7 @@ pygame.mixer.music.play(-1)
 explosionSound = pygame.mixer.Sound("assets/sound/explosion.mp3") #Explosión
 gunshotSound = pygame.mixer.Sound("assets/sound/plasma-gunshot.mp3") #Disparo
 coinSound = pygame.mixer.Sound("assets/sound/coin.mp3") #Moneda
-#shieldSound = pygame.mixer.Sound("assets/sound/shield.mp3") #Escudo
+shieldSound = pygame.mixer.Sound("assets/sound/shield.mp3") #Escudo
 selected = pygame.mixer.Sound("assets/sound/selected.mp3") #Seleccionado
 
 #Mutear música y efectos
@@ -43,7 +43,7 @@ buttonY = 10  #Margen arriba
 homeButtonX = width - buttonX - buttonWidth 
 
 #Configuración de jugador
-player = pygame.image.load("assets/ships/spaceship2.png") #Nave
+player = pygame.image.load("assets/ships/spaceship6.png") #Nave
 playerW = 70 #Tamaño
 playerH = 70 #Tamaño
 player = pygame.transform.scale(player, (playerW, playerH)) #Se crea el jugador
@@ -56,8 +56,8 @@ coin = pygame.transform.scale(coin, (coinW, coinH)) #Se crea la moneda
 
 #Configuración de escudo
 shield = pygame.image.load("assets/extras/shield.png") #Escudo
-shieldW = 70 #Tamaño
-shieldH = 70 #Tamaño
+shieldW = 90 #Tamaño
+shieldH = 90 #Tamaño
 shield = pygame.transform.scale(shield, (shieldW, shieldH)) #Se crea la escudo
 
 #Configuración de vida
@@ -77,8 +77,8 @@ specialStar = pygame.transform.scale(specialStar, (specialStarW, specialStarH)) 
 
 #Configuración de roca
 rock = pygame.image.load("assets/extras/rock.png") #Roca
-rockW = 20 #Tamaño
-rockH = 20 #Tamaño
+rockW = 50 #Tamaño
+rockH = 30 #Tamaño
 rock = pygame.transform.scale(rock, (rockW, rockH)) #Se crea la roca
 
 #Configuración de asteroide
@@ -307,8 +307,7 @@ def draw(player, playerPosition, playerState, elapsedTime, soundButton, muteButt
     #Dibujar el escudo sobre la nave
     if shieldActive:
         shield.set_alpha(150)
-        for shieldObj in shields:
-            myScreen.blit(shieldObj["image"], shieldObj["position"])
+        myScreen.blit(shield, playerPosition)
     
     pygame.display.update()
 
@@ -415,7 +414,7 @@ def updateShields(shields, shieldSpeed, shieldActive, shieldTime, shieldMask, cu
             if playerMask.overlap(shieldMask, over):
                 shieldActive = True
                 shieldTime = currentTime
-                #shieldSound.play()
+                shieldSound.play()
                 shields.remove(shieldObj)
 
     return shieldActive, shieldTime
@@ -423,7 +422,7 @@ def updateShields(shields, shieldSpeed, shieldActive, shieldTime, shieldMask, cu
 #Función: Agregar rocas
 def spawnRocks(rockCount, rockAdd, width, rockW, rockH, rocks):
     if rockCount > rockAdd:
-        numRocks = random.randint(1, 8)
+        numRocks = random.randint(1, 3)
 
         for _ in range(numRocks):
             rockX = random.randint(0, width - rockW)
@@ -527,12 +526,12 @@ def handleEvents(run, homeButtonX, buttonY, buttonWidth, musicMuted, effectsMute
                 if musicMuted:
                     musicMuted = False
                     effectsMuted = False
-                    pygame.mixer.music.set_volume(0.3)
-                    selected.set_volume(0.3)
+                    pygame.mixer.music.set_volume(0.1)
+                    selected.set_volume(0.2)
                     coinSound.set_volume(0.3)
-                    #shieldSound.set_volume(0.3)
-                    explosionSound.set_volume(0.3)
-                    gunshotSound.set_volume(0.3)
+                    shieldSound.set_volume(0.3)
+                    explosionSound.set_volume(0.2)
+                    gunshotSound.set_volume(0.2)
                     selected.play()
                 else:
                     musicMuted = True
@@ -540,7 +539,7 @@ def handleEvents(run, homeButtonX, buttonY, buttonWidth, musicMuted, effectsMute
                     pygame.mixer.music.set_volume(0)
                     selected.set_volume(0)
                     coinSound.set_volume(0)
-                    #shieldSound.set_volume(0)
+                    shieldSound.set_volume(0)
                     explosionSound.set_volume(0)
                     gunshotSound.set_volume(0)
                     selected.play()
