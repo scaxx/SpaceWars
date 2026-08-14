@@ -12,9 +12,11 @@ myScreen = pygame.display.set_mode((width, height)) #Se utilizan las variables d
 pygame.display.set_caption("Space Wars") #Se muestra el nombre del juego
 
 #Configuración de fuentes y fondo
-font = pygame.font.Font("assets/fonts/Silkscreen-Bold.ttf", 35) #Fuente
-back = pygame.transform.scale(pygame.image.load("assets/background5.jpeg"), (width, height)) #Fondo
-icon = pygame.image.load("assets/extras/asteroid.png") #Ícono del juego
+cianNeon = (0, 255, 245) #Color para las letras
+cianNeonOscuro = (0, 180, 220) #Color para seleccionado
+font = pygame.font.Font("assets/fonts/Silkscreen-Regular.ttf", 35) #Fuente
+back = pygame.transform.scale(pygame.image.load("assets/backgrounds/background5.jpeg"), (width, height)) #Fondo
+icon = pygame.image.load("assets/icon/icon.png") #Ícono del juego
 pygame.display.set_icon(icon) #Se muestra el ícono
 
 #Configuración de música
@@ -124,11 +126,11 @@ def menu():
         mousePos = pygame.mouse.get_pos()
 
         #Renderiza los botones
-        title = font.render("Welcome to Space Wars!", True, "white")
+        title = font.render("Welcome to Space Wars!", True, cianNeon)
         
-        playB = font.render("Play", True, "white")
-        optionsB = font.render("Options", True, "white")
-        quitB = font.render("Quit", True, "white")
+        playB = font.render("Play", True, cianNeon)
+        optionsB = font.render("Options", True, cianNeon)
+        quitB = font.render("Quit", True, cianNeon)
 
         titleRect = title.get_rect(center=(width/2, height/4))
         playRect = playB.get_rect(center=(width/2, height/2))
@@ -136,9 +138,9 @@ def menu():
         quitRect = quitB.get_rect(center=(width/2, height/2 + 200))
 
         #Define los colores de los botones
-        playColor = "gray" if playRect.collidepoint(mousePos) else "white"
-        optionsColor = "gray" if optionsRect.collidepoint(mousePos) else "white"
-        quitColor = "gray" if quitRect.collidepoint(mousePos) else "white"
+        playColor = cianNeonOscuro if playRect.collidepoint(mousePos) else cianNeon
+        optionsColor = cianNeonOscuro if optionsRect.collidepoint(mousePos) else cianNeon
+        quitColor = cianNeonOscuro if quitRect.collidepoint(mousePos) else cianNeon
 
         #Re-renderiza los botones con los colores actualizados
         playB = font.render("Play", True, playColor)
@@ -185,10 +187,10 @@ def optionsMenu():
         mousePos = pygame.mouse.get_pos()
 
         #Renderiza las opciones
-        title = font.render("Options", True, "white")
-        muteMusic = font.render(f"Music: {'ON' if not musicMuted else 'OFF'}", True, "white" if not musicMuted else "gray")
-        muteEffects = font.render(f"Effects: {'ON' if not effectsMuted else 'OFF'}", True, "white" if not effectsMuted else "gray")
-        goBack = font.render("Back to Menu", True, "white")
+        title = font.render("Options", True, cianNeon)
+        muteMusic = font.render(f"Music: {'ON' if not musicMuted else 'OFF'}", True, cianNeon if not musicMuted else cianNeonOscuro)
+        muteEffects = font.render(f"Effects: {'ON' if not effectsMuted else 'OFF'}", True, cianNeon if not effectsMuted else cianNeonOscuro)
+        goBack = font.render("Back to Menu", True, cianNeon)
 
         titleRect = title.get_rect(center=(width/2, height/4))
         muteMusicRect = muteMusic.get_rect(center=(width/2, height/2))
@@ -196,7 +198,7 @@ def optionsMenu():
         goBackRect = goBack.get_rect(center=(width/2, height/2 + 200))
 
         #Determina el color del botón
-        goBackColor = "gray" if goBackRect.collidepoint(mousePos) else "white"
+        goBackColor = cianNeonOscuro if goBackRect.collidepoint(mousePos) else cianNeon
 
         #Re-renderiza los botones con los colores actualizados
         goBack = font.render("Back to Menu", True, goBackColor)
@@ -237,11 +239,11 @@ def draw(player, playerPosition, playerState, elapsedTime, soundButton, muteButt
     myScreen.blit(back, (0, 0))
 
     #Dibujar tiempo
-    timeRecord = font.render(f"Time: {round(elapsedTime)} s", 1, "white")
+    timeRecord = font.render(f"Time: {round(elapsedTime)} s", 1, cianNeon)
     myScreen.blit(timeRecord, (10, 10))
 
     #Dibujar puntos
-    pointsRecord = font.render(f"Points: {points}", 1, "white")
+    pointsRecord = font.render(f"Points: {points}", 1, cianNeon)
     myScreen.blit(pointsRecord, (timeRecord.get_width() + 50, 10))
 
     #Dibujar botón home
@@ -260,7 +262,7 @@ def draw(player, playerPosition, playerState, elapsedTime, soundButton, muteButt
     coinIconX = timeRecord.get_width() + pointsRecord.get_width() + 80
     myScreen.blit(coin, (coinIconX, 25))
 
-    coinRecord = font.render(f"{coinsCollected}", 1, "white")
+    coinRecord = font.render(f"{coinsCollected}", 1, cianNeon)
     myScreen.blit(coinRecord, (coinIconX + coinW + 10, 10))
 
     #Dibujar vidas
@@ -484,13 +486,13 @@ def spawnShields(shieldCount, shieldAdd, width, shieldW, shieldH, shields):
 #Función: Menú Game Over
 def menuGameOver(playerHit, font, width, height, elapsedTime, points, coinsCollected):
     if playerHit:
-        gameOver = font.render("Game Over", 2, "white")
+        gameOver = font.render("Game Over", 2, cianNeon)
         myScreen.blit(gameOver, (width / 2 - gameOver.get_width() / 2, height / 2 - gameOver.get_height() / 2))
-        timeRecord = font.render(f"Time: {round(elapsedTime)} s", 1, "white")
+        timeRecord = font.render(f"Time: {round(elapsedTime)} s", 1, cianNeon)
         myScreen.blit(timeRecord, (width / 2 - timeRecord.get_width() / 2, height / 2 - gameOver.get_height() / 2 + 50))
-        pointsRecord = font.render(f"Points: {points}", 1, "white")
+        pointsRecord = font.render(f"Points: {points}", 1, cianNeon)
         myScreen.blit(pointsRecord, (width / 2 - pointsRecord.get_width() / 2, height / 2 - gameOver.get_height() / 2 + 100))
-        coinsRecord = font.render(f"Coins Collected: {coinsCollected}", 1, "white")
+        coinsRecord = font.render(f"Coins Collected: {coinsCollected}", 1, cianNeon)
         myScreen.blit(coinsRecord, (width / 2 - coinsRecord.get_width() / 2, height / 2 - gameOver.get_height() / 2 + 150))
         pygame.display.update()
         pygame.time.delay(3000)
