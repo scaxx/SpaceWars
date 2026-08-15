@@ -45,7 +45,7 @@ buttonY = 10  #Margen arriba
 homeButtonX = width - buttonX - buttonWidth 
 
 #Configuración de jugador
-player = pygame.image.load("assets/ships/spaceship6.png") #Nave
+player = pygame.image.load("assets/ships/spaceship3.png") #Nave
 playerW = 70 #Tamaño
 playerH = 70 #Tamaño
 player = pygame.transform.scale(player, (playerW, playerH)) #Se crea el jugador
@@ -308,8 +308,13 @@ def draw(player, playerPosition, playerState, elapsedTime, soundButton, muteButt
 
     #Dibujar el escudo sobre la nave
     if shieldActive:
-        shield.set_alpha(150)
-        myScreen.blit(shield, playerPosition)
+        shield.set_alpha(125)
+        shieldX = playerPosition[0] - (shieldW - playerW) // 2
+        shieldY = playerPosition[1] - (shieldH - playerH) // 2
+        myScreen.blit(shield, (shieldX, shieldY))
+    else:
+        shield.set_alpha(255)
+
     
     pygame.display.update()
 
