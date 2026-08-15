@@ -15,7 +15,7 @@ pygame.display.set_caption("Space Wars") #Se muestra el nombre del juego
 cianNeon = (0, 255, 245) #Color para las letras
 cianNeonOscuro = (0, 180, 220) #Color para seleccionado
 font = pygame.font.Font("assets/fonts/Silkscreen-Regular.ttf", 35) #Fuente
-back = pygame.transform.scale(pygame.image.load("assets/backgrounds/background3.jpeg"), (width, height)) #Fondo
+back = pygame.transform.scale(pygame.image.load("assets/backgrounds/background5.jpeg"), (width, height)) #Fondo
 icon = pygame.image.load("assets/icon/icon.png") #Ícono del juego
 pygame.display.set_icon(icon) #Se muestra el ícono
 
@@ -45,15 +45,15 @@ buttonY = 10  #Margen arriba
 homeButtonX = width - buttonX - buttonWidth 
 
 #Configuración de jugador
-player = pygame.image.load("assets/ships/spaceship4.png") #Nave
+player = pygame.image.load("assets/ships/spaceship1.png") #Nave
 playerW = 70 #Tamaño
 playerH = 70 #Tamaño
 player = pygame.transform.scale(player, (playerW, playerH)) #Se crea el jugador
 
 #Configuración de moneda
 coin = pygame.image.load("assets/extras/coin.png") #Moneda
-coinW = 50 #Tamaño
-coinH = 25 #Tamaño
+coinW = 40 #Tamaño
+coinH = 40 #Tamaño
 coin = pygame.transform.scale(coin, (coinW, coinH)) #Se crea la moneda
 
 #Configuración de escudo
@@ -65,7 +65,7 @@ shield = pygame.transform.scale(shield, (shieldW, shieldH)) #Se crea la escudo
 #Configuración de vida
 life = pygame.image.load("assets/extras/life.png") #Vida
 lifeW = 40 #Tamaño
-lifeH = 25 #Tamaño
+lifeH = 40 #Tamaño
 life = pygame.transform.scale(life, (lifeW, lifeH)) #Se crea la vida
 #Vidas perdidas
 emptyLife = pygame.image.load("assets/extras/emptyLife.png") #Vida vacía
@@ -260,7 +260,7 @@ def draw(player, playerPosition, playerState, elapsedTime, soundButton, muteButt
         myScreen.blit(coinObj["image"], coinObj["position"])
 
     coinIconX = timeRecord.get_width() + pointsRecord.get_width() + 80
-    myScreen.blit(coin, (coinIconX, 25))
+    myScreen.blit(coin, (coinIconX, 15))
 
     coinRecord = font.render(f"{coinsCollected}", 1, cianNeon)
     myScreen.blit(coinRecord, (coinIconX + coinW + 10, 10))
@@ -268,11 +268,11 @@ def draw(player, playerPosition, playerState, elapsedTime, soundButton, muteButt
     #Dibujar vidas
     livesBaseX = coinIconX + coinW + 10 + coinRecord.get_width() + 50
     for l in range(3):
-        lifeIconX = livesBaseX + l * (lifeW + 25)
+        lifeIconX = livesBaseX + l * (lifeW + 15)
         if l < lives:
-            myScreen.blit(life, (lifeIconX, 25))
+            myScreen.blit(life, (lifeIconX, 15))
         else:
-            myScreen.blit(emptyLife, (lifeIconX, 25))
+            myScreen.blit(emptyLife, (lifeIconX, 15))
 
     #Dibujar rocas
     for rockObj in rocks:
