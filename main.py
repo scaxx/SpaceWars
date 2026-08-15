@@ -15,7 +15,7 @@ pygame.display.set_caption("Space Wars") #Se muestra el nombre del juego
 cianNeon = (0, 255, 245) #Color para las letras
 cianNeonOscuro = (0, 180, 220) #Color para seleccionado
 font = pygame.font.Font("assets/fonts/Silkscreen-Regular.ttf", 35) #Fuente
-back = pygame.transform.scale(pygame.image.load("assets/backgrounds/background5.jpeg"), (width, height)) #Fondo
+back = pygame.transform.scale(pygame.image.load("assets/backgrounds/background3.jpeg"), (width, height)) #Fondo
 icon = pygame.image.load("assets/icon/icon.png") #Ícono del juego
 pygame.display.set_icon(icon) #Se muestra el ícono
 
@@ -45,7 +45,7 @@ buttonY = 10  #Margen arriba
 homeButtonX = width - buttonX - buttonWidth 
 
 #Configuración de jugador
-player = pygame.image.load("assets/ships/spaceship3.png") #Nave
+player = pygame.image.load("assets/ships/spaceship4.png") #Nave
 playerW = 70 #Tamaño
 playerH = 70 #Tamaño
 player = pygame.transform.scale(player, (playerW, playerH)) #Se crea el jugador
@@ -58,7 +58,7 @@ coin = pygame.transform.scale(coin, (coinW, coinH)) #Se crea la moneda
 
 #Configuración de escudo
 shield = pygame.image.load("assets/extras/shield.png") #Escudo
-shieldW = 90 #Tamaño
+shieldW = 150 #Tamaño
 shieldH = 90 #Tamaño
 shield = pygame.transform.scale(shield, (shieldW, shieldH)) #Se crea la escudo
 
@@ -79,8 +79,8 @@ specialStar = pygame.transform.scale(specialStar, (specialStarW, specialStarH)) 
 
 #Configuración de roca
 rock = pygame.image.load("assets/extras/rock.png") #Roca
-rockW = 50 #Tamaño
-rockH = 30 #Tamaño
+rockW = 40 #Tamaño
+rockH = 40 #Tamaño
 rock = pygame.transform.scale(rock, (rockW, rockH)) #Se crea la roca
 
 #Configuración de asteroide
