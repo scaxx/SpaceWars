@@ -1,6 +1,7 @@
 import pygame
 import time
 import random #Se llaman todas las funciones necesarias para desarrollar el juego
+import users #Importamos el archivo que maneja la lógica de logueo de usuarios
 
 #Se inicializan funciones dentro de pygame
 pygame.font.init()
