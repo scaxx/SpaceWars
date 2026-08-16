@@ -15,7 +15,7 @@ pygame.display.set_caption("Space Wars") #Se muestra el nombre del juego
 cianNeon = (0, 255, 245) #Color para las letras
 cianNeonOscuro = (0, 180, 220) #Color para seleccionado
 font = pygame.font.Font("assets/fonts/Silkscreen-Regular.ttf", 35) #Fuente
-back = pygame.transform.scale(pygame.image.load("assets/backgrounds/background5.jpeg"), (width, height)) #Fondo
+back = pygame.transform.scale(pygame.image.load("assets/backgrounds/background6.jpeg"), (width, height)) #Fondo
 icon = pygame.image.load("assets/icon/icon.png") #Ícono del juego
 pygame.display.set_icon(icon) #Se muestra el ícono
 
@@ -45,7 +45,7 @@ buttonY = 10  #Margen arriba
 homeButtonX = width - buttonX - buttonWidth 
 
 #Configuración de jugador
-player = pygame.image.load("assets/ships/spaceship1.png") #Nave
+player = pygame.image.load("assets/ships/spaceship2.png") #Nave
 playerW = 70 #Tamaño
 playerH = 70 #Tamaño
 player = pygame.transform.scale(player, (playerW, playerH)) #Se crea el jugador
