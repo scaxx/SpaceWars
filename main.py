@@ -130,27 +130,32 @@ def menu():
         title = font.render("Welcome to Space Wars!", True, cianNeon)
         
         playB = font.render("Play", True, cianNeon)
+        newPlayerB = font.render("New Player", True, cianNeon)
         optionsB = font.render("Options", True, cianNeon)
         quitB = font.render("Quit", True, cianNeon)
 
-        titleRect = title.get_rect(center=(width/2, height/4))
+        titleRect = title.get_rect(center=(width/2, height/2))
         playRect = playB.get_rect(center=(width/2, height/2))
-        optionsRect = optionsB.get_rect(center=(width/2, height/2 + 100))
-        quitRect = quitB.get_rect(center=(width/2, height/2 + 200))
+        newPlayerRect = newPlayerB.get_rect(center=(width/2, height/2 + 100))
+        optionsRect = optionsB.get_rect(center=(width/2, height/2 + 200))
+        quitRect = quitB.get_rect(center=(width/2, height/2 + 300))
 
         #Define los colores de los botones
         playColor = cianNeonOscuro if playRect.collidepoint(mousePos) else cianNeon
+        newPlayerColor = cianNeonOscuro if newPlayerRect.collidepoint(mousePos) else cianNeon
         optionsColor = cianNeonOscuro if optionsRect.collidepoint(mousePos) else cianNeon
         quitColor = cianNeonOscuro if quitRect.collidepoint(mousePos) else cianNeon
 
         #Re-renderiza los botones con los colores actualizados
         playB = font.render("Play", True, playColor)
+        newPlayerB = font.render("New Player", True, newPlayerColor)
         optionsB = font.render("Options", True, optionsColor)
         quitB = font.render("Quit", True, quitColor)
 
         #Dibuja los botones
         myScreen.blit(title, titleRect)
         myScreen.blit(playB, playRect)
+        myScreen.blit(newPlayerB, newPlayerRect)
         myScreen.blit(optionsB, optionsRect)
         myScreen.blit(quitB, quitRect)
 
@@ -165,6 +170,9 @@ def menu():
                 if playRect.collidepoint(event.pos):
                     selected.play()
                     run = False
+                elif newPlayerRect.collidepoint(event.pos):
+                    selected.play()
+                    newPlayerMenu()
                 elif optionsRect.collidepoint(event.pos):
                     selected.play()
                     optionsMenu()
@@ -174,6 +182,23 @@ def menu():
                     quit()
 
         pygame.time.delay(500)
+
+#Función: Menú para crear nuevo jugador
+def newPlayerMenu(newPlayer):
+
+    enterNewPlayer = font.render("Enter new player name", True, cianNeon)
+    enterNewPlayerRect = enterNewPlayer.get_rect(center=(width/2, height/2))
+    myScreen.blit(enterNewPlayer, enterNewPlayerRect)
+
+    while users.userExists(newPlayer):
+
+        usernameInUseMessage = font.render("Sorry, username already in use :(", True, cianNeon)
+        usernameInUseMessageRect = usernameInUseMessage.get_rect(center=(width/2, height/2 + 100))
+        myScreen.blit(usernameInUseMessage, usernameInUseMessageRect)
+
+        #Falta agregar el campo para que el usuario pueda escribir su nombre de usuario
+
+    
 
 #Función: Menú de opciones   
 def optionsMenu():
