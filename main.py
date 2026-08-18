@@ -184,21 +184,60 @@ def menu():
         pygame.time.delay(500)
 
 #Función: Menú para crear nuevo jugador
-def newPlayerMenu(newPlayer):
+def newPlayerMenu(loadUsers, createUser, saveUsers, userExists):
 
+    pygame.display.set_caption("Create New Player")
+
+    #Iniciamos la variable donde se guardará el nombre (temporalmente)
+    newPlayer = ""
+
+    usersData = loadUsers() #Obtengo el diccionario de jugadores
+
+    while newPlayer == "" or usersData(newPlayer, usersData):
+
+        for event in pygame.event.get():
+
+            if event.type == pygame.QUIT:
+
+                pygame.quit()
+
+            if event.type == pygame.K_BACKSPACE:
+
+                newPlayer = newPlayer[:-1] #Borro el último caracter
+
+            elif event.key == pygame.K_RETURN:
+
+                pass
+
+            else:
+
+                if len(newPlayer) < 15: #Pongo 15 como referencia para el límite de caracteres
+
+                    newPlayer -= event.unicode #Agrega la letra que se presiona
+
+    #Título principal
     enterNewPlayer = font.render("Enter new player name", True, cianNeon)
     enterNewPlayerRect = enterNewPlayer.get_rect(center=(width/2, height/2))
     myScreen.blit(enterNewPlayer, enterNewPlayerRect)
 
-    while users.userExists(newPlayer):
+    #Lo que el usuario escribe
+    userInput = font.render(newPlayer, True, cianNeon)
+    userInputRect = userInput.get_rect(center=(width/2, height/2))
+    myScreen.blit(userInput, userInputRect)
 
-        usernameInUseMessage = font.render("Sorry, username already in use :(", True, cianNeon)
-        usernameInUseMessageRect = usernameInUseMessage.get_rect(center=(width/2, height/2 + 100))
-        myScreen.blit(usernameInUseMessage, usernameInUseMessageRect)
+    #if newPlayer != "" and userExists(newPlayer, usersData):
 
-        #Falta agregar el campo para que el usuario pueda escribir su nombre de usuario
+    #    userInUseMessage = font.render("Username already in use :(")
+    #    userInUseMessageRect = userInUseMessage.get_rect(center=(width/2, height/2 + 100))
+    #    myScreen.blit(userInUseMessage, userInUseMessageRect)
 
-    
+    #pygame.display.flip()
+
+    createUser(newPlayer, usersData)
+    saveUsers(usersData)
+
+    return newPlayer
+
 
 #Función: Menú de opciones   
 def optionsMenu():
