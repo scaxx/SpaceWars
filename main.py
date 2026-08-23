@@ -219,6 +219,9 @@ def newPlayerMenu():
                     if newPlayer != "" and not users.userExists(newPlayer, usersData):
 
                         finished = True
+                        newUserCreated = font.render("New user created successfully :)")
+                        newUserCreatedRect = newUserCreated.get_rect(center=(width/2, height/2 + 100))
+                        myScreen.blit(newUserCreated, newUserCreatedRect)
 
                     elif newPlayer != "" and users.userExists(newPlayer, usersData):
 
