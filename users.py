@@ -19,12 +19,11 @@ def userExists(username, users):
     return username in users
 
 def createUser(username, users):
-
-    if not userExists(username, users):
         
-        users[username] = ({
-            "total coins" : 0,
-            "unlockedSkins" : ["default"],
-            "equippedSkins": ["default"],
-            "scores": []
-        })
+    users[username] = ({
+        "totalCoins" : 0,
+        "unlockedSkins" : ["default"],
+        "equippedSkin": "default",
+        "scores": []
+    })
+
