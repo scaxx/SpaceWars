@@ -184,57 +184,59 @@ def menu():
         pygame.time.delay(500)
 
 #Función: Menú para crear nuevo jugador
-def newPlayerMenu(loadUsers, createUser, saveUsers, userExists):
+def newPlayerMenu():
 
     pygame.display.set_caption("Create New Player")
 
     #Iniciamos la variable donde se guardará el nombre (temporalmente)
     newPlayer = ""
+    finished = False
 
-    usersData = loadUsers() #Obtengo el diccionario de jugadores
+    usersData = users.loadUsers() #Obtengo el diccionario de jugadores
 
-    while newPlayer == "" or usersData(newPlayer, usersData):
+    while finished == False:
+
+        #Título principal
+        enterNewPlayer = font.render("Enter new player name", True, cianNeon)
+        enterNewPlayerRect = enterNewPlayer.get_rect(center=(width/2, height/2))
+        myScreen.blit(enterNewPlayer, enterNewPlayerRect)
 
         for event in pygame.event.get():
 
             if event.type == pygame.QUIT:
 
                 pygame.quit()
+                quit()
 
-            if event.type == pygame.K_BACKSPACE:
+            if event.type == pygame.KEYDOWN:
 
-                newPlayer = newPlayer[:-1] #Borro el último caracter
+                if event.key == pygame.K_BACKSPACE:
 
-            elif event.key == pygame.K_RETURN:
+                    newPlayer = newPlayer[:-1]
+                
+                elif event.key == pygame.K_RETURN:
 
-                pass
+                    if newPlayer != "" and not users.userExists(newPlayer, usersData):
 
-            else:
+                        finished = True
 
-                if len(newPlayer) < 15: #Pongo 15 como referencia para el límite de caracteres
+                    elif newPlayer != "" and users.userExists(newPlayer, usersData):
 
-                    newPlayer -= event.unicode #Agrega la letra que se presiona
+                        userInUseMessage = font.render("Username already in use :(")
+                        userInUseMessageRect = userInUseMessage.get_rect(center=(width/2, height/2 + 100))
+                        myScreen.blit(userInUseMessage, userInUseMessageRect)
 
-    #Título principal
-    enterNewPlayer = font.render("Enter new player name", True, cianNeon)
-    enterNewPlayerRect = enterNewPlayer.get_rect(center=(width/2, height/2))
-    myScreen.blit(enterNewPlayer, enterNewPlayerRect)
+                else:
 
-    #Lo que el usuario escribe
-    userInput = font.render(newPlayer, True, cianNeon)
-    userInputRect = userInput.get_rect(center=(width/2, height/2))
-    myScreen.blit(userInput, userInputRect)
+                    #Lo que el usuario escribe
+                    userInput = font.render(newPlayer, True, cianNeon)
+                    userInputRect = userInput.get_rect(center=(width/2, height/2))
+                    myScreen.blit(userInput, userInputRect)
 
-    #if newPlayer != "" and userExists(newPlayer, usersData):
+                    newPlayer += event.unicode
 
-    #    userInUseMessage = font.render("Username already in use :(")
-    #    userInUseMessageRect = userInUseMessage.get_rect(center=(width/2, height/2 + 100))
-    #    myScreen.blit(userInUseMessage, userInUseMessageRect)
-
-    #pygame.display.flip()
-
-    createUser(newPlayer, usersData)
-    saveUsers(usersData)
+    users.createUser(newPlayer, usersData)
+    users.saveUsers(usersData)
 
     return newPlayer
 
