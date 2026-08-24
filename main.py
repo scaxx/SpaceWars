@@ -116,6 +116,18 @@ asteroidMask = pygame.mask.from_surface(asteroid)
 shieldMask = pygame.mask.from_surface(shield)
 bulletMask = pygame.mask.from_surface(bullet)
 
+#Jugador actual
+currentPlayer = None
+
+#Función: Mostrar nombre del jugador actual
+def playerName(currentPlayer):
+
+    displayPlayer = "Guest" if currentPlayer is None else currentPlayer
+    displayPlayerName = font.render(displayPlayer, True, cianNeon)
+    displayPlayerNameRect = displayPlayerName.get_rect(center=(width/2, height/2))
+    myScreen.blit(displayPlayerName, displayPlayerNameRect)
+
+
 #Función: Menu
 def menu():
     run = True #El juego está corriendo, se muestra el menú
