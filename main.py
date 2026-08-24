@@ -279,7 +279,7 @@ def newPlayerMenu():
 
             if event.type == pygame.MOUSEBUTTONDOWN:
 
-                if goBackRect.collidepoint(event.pos):
+                if goBackRect.collidepoint(event.mousePos):
 
                     selected.play()
                     run = False
@@ -300,11 +300,13 @@ def loginMenu():
     #Iniciamos la variable donde se guardará el nombre (temporalmente)
     currentPlayer = ""
     finished = False
+    run = True
 
     usersData = users.loadUsers() #Obtengo el diccionario de jugadores
 
-    while finished == False:
+    while finished == False or run:
 
+        mousePos = pygame.mouse.get_pos()
         myScreen.blit(back, (0, 0))
 
         #Título principal
@@ -317,12 +319,25 @@ def loginMenu():
         userInputRect = userInput.get_rect(center=(width / 2, height / 2 + 100))
         myScreen.blit(userInput, userInputRect)
 
+         #En caso de que quiera volver atrás
+        goBack = font.render("Back to Menu", True, cianNeon)
+        goBackRect = goBack.get_rect(center=(width / 2, height / 2 + 200))
+        myScreen.blit(goBack, goBackRect)
+
         for event in pygame.event.get():
 
             if event.type == pygame.QUIT:
 
                 pygame.quit()
                 quit()
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+            
+                if goBackRect.collidepoint(event.pos):
+    
+                    selected.play()
+                    run = False
+                    break
 
             if event.type == pygame.KEYDOWN:
 
