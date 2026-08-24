@@ -124,7 +124,7 @@ def playerName(currentPlayer):
 
     displayPlayer = "Guest" if currentPlayer is None else currentPlayer
     displayPlayerName = font.render(displayPlayer, True, cianNeon)
-    displayPlayerNameRect = displayPlayerName.get_rect(center=(width/2, height/2))
+    displayPlayerNameRect = displayPlayerName.get_rect(bottomright=(width - currentPlayer.length - 10, height - 30))
     myScreen.blit(displayPlayerName, displayPlayerNameRect)
 
 #Función: Menu
@@ -140,6 +140,8 @@ def menu():
 
         #Renderiza los botones
         title = font.render("Welcome to Space Wars!", True, cianNeon)
+
+        playerName(currentPlayer)
         
         playB = font.render("Play", True, cianNeon)
         loginB = font.render("Log In", True, cianNeon)
