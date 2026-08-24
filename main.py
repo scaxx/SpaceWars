@@ -127,10 +127,10 @@ def playerName(currentPlayer):
     displayPlayerNameRect = displayPlayerName.get_rect(center=(width/2, height/2))
     myScreen.blit(displayPlayerName, displayPlayerNameRect)
 
-
 #Función: Menu
 def menu():
     run = True #El juego está corriendo, se muestra el menú
+    global currentPlayer #Se define la variable global para manejar el nombre del jugador actual
 
     while run:
         myScreen.blit(back, (0, 0))
@@ -142,24 +142,28 @@ def menu():
         title = font.render("Welcome to Space Wars!", True, cianNeon)
         
         playB = font.render("Play", True, cianNeon)
+        loginB = font.render("Log In", True, cianNeon)
         newPlayerB = font.render("New Player", True, cianNeon)
         optionsB = font.render("Options", True, cianNeon)
         quitB = font.render("Quit", True, cianNeon)
 
         titleRect = title.get_rect(center=(width/2, height/2))
-        playRect = playB.get_rect(center=(width/2, height/2))
-        newPlayerRect = newPlayerB.get_rect(center=(width/2, height/2 + 100))
-        optionsRect = optionsB.get_rect(center=(width/2, height/2 + 200))
-        quitRect = quitB.get_rect(center=(width/2, height/2 + 300))
+        loginRect = loginB.get_rect(center=(width/2, height/2 + 100))
+        playRect = playB.get_rect(center=(width/2, height/2 + 200))
+        newPlayerRect = newPlayerB.get_rect(center=(width/2, height/2 + 300))
+        optionsRect = optionsB.get_rect(center=(width/2, height/2 + 400))
+        quitRect = quitB.get_rect(center=(width/2, height/2 + 500))
 
         #Define los colores de los botones
         playColor = cianNeonOscuro if playRect.collidepoint(mousePos) else cianNeon
+        loginColor = cianNeonOscuro if loginRect.collidepoint(mousePos) else cianNeon
         newPlayerColor = cianNeonOscuro if newPlayerRect.collidepoint(mousePos) else cianNeon
         optionsColor = cianNeonOscuro if optionsRect.collidepoint(mousePos) else cianNeon
         quitColor = cianNeonOscuro if quitRect.collidepoint(mousePos) else cianNeon
 
         #Re-renderiza los botones con los colores actualizados
         playB = font.render("Play", True, playColor)
+        loginB = font.render("Log In", True, loginColor)
         newPlayerB = font.render("New Player", True, newPlayerColor)
         optionsB = font.render("Options", True, optionsColor)
         quitB = font.render("Quit", True, quitColor)
@@ -167,6 +171,7 @@ def menu():
         #Dibuja los botones
         myScreen.blit(title, titleRect)
         myScreen.blit(playB, playRect)
+        myScreen.blit(loginB, loginRect)
         myScreen.blit(newPlayerB, newPlayerRect)
         myScreen.blit(optionsB, optionsRect)
         myScreen.blit(quitB, quitRect)
@@ -182,9 +187,12 @@ def menu():
                 if playRect.collidepoint(event.pos):
                     selected.play()
                     run = False
+                elif loginRect.collidepoint(event.pos):
+                    selected.play()
+                    currentPlayer = loginMenu()
                 elif newPlayerRect.collidepoint(event.pos):
                     selected.play()
-                    newPlayerMenu()
+                    currentPlayer = newPlayerMenu()
                 elif optionsRect.collidepoint(event.pos):
                     selected.play()
                     optionsMenu()
