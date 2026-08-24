@@ -46,7 +46,7 @@ buttonY = 10  #Margen arriba
 homeButtonX = width - buttonX - buttonWidth 
 
 #Configuración de jugador
-player = pygame.image.load("assets/ships/spaceship2.png") #Nave
+player = pygame.image.load("assets/ships/default.png") #Nave
 playerW = 70 #Tamaño
 playerH = 70 #Tamaño
 player = pygame.transform.scale(player, (playerW, playerH)) #Se crea el jugador
@@ -124,7 +124,7 @@ def playerName(currentPlayer):
 
     displayPlayer = "Guest" if currentPlayer is None else currentPlayer
     displayPlayerName = font.render(displayPlayer, True, cianNeon)
-    displayPlayerNameRect = displayPlayerName.get_rect(bottomright=(width - currentPlayer.length - 10, height - 30))
+    displayPlayerNameRect = displayPlayerName.get_rect(bottomright=(width - len(displayPlayer) - 10, height - 10))
     myScreen.blit(displayPlayerName, displayPlayerNameRect)
 
 #Función: Menu
@@ -149,12 +149,12 @@ def menu():
         optionsB = font.render("Options", True, cianNeon)
         quitB = font.render("Quit", True, cianNeon)
 
-        titleRect = title.get_rect(center=(width/2, height/2))
-        loginRect = loginB.get_rect(center=(width/2, height/2 + 100))
-        playRect = playB.get_rect(center=(width/2, height/2 + 200))
-        newPlayerRect = newPlayerB.get_rect(center=(width/2, height/2 + 300))
-        optionsRect = optionsB.get_rect(center=(width/2, height/2 + 400))
-        quitRect = quitB.get_rect(center=(width/2, height/2 + 500))
+        titleRect = title.get_rect(center=(width/2, height/5))
+        playRect = playB.get_rect(center=(width/2, height/5 + 100))
+        loginRect = loginB.get_rect(center=(width/2, height/5 + 200))
+        newPlayerRect = newPlayerB.get_rect(center=(width/2, height/5 + 300))
+        optionsRect = optionsB.get_rect(center=(width/2, height/5 + 400))
+        quitRect = quitB.get_rect(center=(width/2, height/5 + 500))
 
         #Define los colores de los botones
         playColor = cianNeonOscuro if playRect.collidepoint(mousePos) else cianNeon
@@ -227,7 +227,7 @@ def newPlayerMenu():
 
         #Lo que el usuario escribe
         userInput = font.render(newPlayer, True, cianNeon)
-        userInputRect = userInput.get_rect(center=(width/2, height/2))
+        userInputRect = userInput.get_rect(center=(width/2, height/2 + 100))
         myScreen.blit(userInput, userInputRect)
 
         for event in pygame.event.get():
@@ -248,16 +248,17 @@ def newPlayerMenu():
                     if newPlayer != "" and not users.userExists(newPlayer, usersData):
 
                         newUserCreated = font.render("New user created successfully :)", True, cianNeon)
-                        newUserCreatedRect = newUserCreated.get_rect(center=(width/2, height/2 + 100))
+                        newUserCreatedRect = newUserCreated.get_rect(center=(width/2, height/2 + 200))
                         myScreen.blit(newUserCreated, newUserCreatedRect)
                         pygame.display.update()
                         pygame.time.delay(1000)
                         finished = True
+                        break
 
                     elif newPlayer != "" and users.userExists(newPlayer, usersData):
 
                         userInUseMessage = font.render("Username already in use :(", True, cianNeon)
-                        userInUseMessageRect = userInUseMessage.get_rect(center=(width/2, height/2 + 100))
+                        userInUseMessageRect = userInUseMessage.get_rect(center=(width/2, height/2 + 200))
                         myScreen.blit(userInUseMessage, userInUseMessageRect)
                         pygame.display.update()
                         pygame.time.delay(1000)
@@ -297,7 +298,7 @@ def loginMenu():
 
         #Lo que el usuario escribe
         userInput = font.render(currentPlayer, True, cianNeon)
-        userInputRect = userInput.get_rect(center=(width/2, height/2))
+        userInputRect = userInput.get_rect(center=(width/2, height/2 + 100))
         myScreen.blit(userInput, userInputRect)
 
         for event in pygame.event.get():
@@ -318,16 +319,17 @@ def loginMenu():
                     if currentPlayer != "" and users.userExists(currentPlayer, usersData):
 
                         playerLogedIn = font.render("Player logged in successfully :)", True, cianNeon)
-                        playerLogedInRect = playerLogedIn.get_rect(center=(width/2, height/2 + 100))
+                        playerLogedInRect = playerLogedIn.get_rect(center=(width/2, height/2 + 200))
                         myScreen.blit(playerLogedIn, playerLogedInRect)
                         pygame.display.update()
                         pygame.time.delay(1000)
                         finished = True
+                        break
 
                     elif currentPlayer != "" and not users.userExists(currentPlayer, usersData):
 
                         PlayerNotLoggedIn = font.render("Error in loggin in, try creating an account :(", True, cianNeon)
-                        PlayerNotLoggedInRect = PlayerNotLoggedIn.get_rect(center=(width/2, height/2 + 100))
+                        PlayerNotLoggedInRect = PlayerNotLoggedIn.get_rect(center=(width/2, height/2 + 200))
                         myScreen.blit(PlayerNotLoggedIn, PlayerNotLoggedInRect)
                         pygame.display.update()
                         pygame.time.delay(1000)
