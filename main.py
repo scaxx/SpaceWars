@@ -149,12 +149,12 @@ def menu():
         optionsB = font.render("Options", True, cianNeon)
         quitB = font.render("Quit", True, cianNeon)
 
-        titleRect = title.get_rect(center=(width/2, height/5))
-        playRect = playB.get_rect(center=(width/2, height/5 + 100))
-        loginRect = loginB.get_rect(center=(width/2, height/5 + 200))
-        newPlayerRect = newPlayerB.get_rect(center=(width/2, height/5 + 300))
-        optionsRect = optionsB.get_rect(center=(width/2, height/5 + 400))
-        quitRect = quitB.get_rect(center=(width/2, height/5 + 500))
+        titleRect = title.get_rect(center=(width / 2, height/5))
+        playRect = playB.get_rect(center=(width / 2, height/5 + 100))
+        loginRect = loginB.get_rect(center=(width / 2, height/5 + 200))
+        newPlayerRect = newPlayerB.get_rect(center=(width / 2, height/5 + 300))
+        optionsRect = optionsB.get_rect(center=(width / 2, height/5 + 400))
+        quitRect = quitB.get_rect(center=(width / 2, height/5 + 500))
 
         #Define los colores de los botones
         playColor = cianNeonOscuro if playRect.collidepoint(mousePos) else cianNeon
@@ -208,27 +208,35 @@ def menu():
 #Función: Menú para crear nuevo jugador
 def newPlayerMenu():
 
+    mousePos = pygame.mouse.get_pos()
     pygame.display.set_caption("Create New Player")
 
     #Iniciamos la variable donde se guardará el nombre (temporalmente)
     newPlayer = ""
     finished = False
+    run = True
 
     usersData = users.loadUsers() #Obtengo el diccionario de jugadores
 
-    while finished == False:
+    while finished == False or run:
 
         myScreen.blit(back, (0, 0))
 
         #Título principal
         enterNewPlayer = font.render("Enter new player name", True, cianNeon)
-        enterNewPlayerRect = enterNewPlayer.get_rect(center=(width/2, height/2))
+        enterNewPlayerRect = enterNewPlayer.get_rect(center=(width / 2, height / 2))
         myScreen.blit(enterNewPlayer, enterNewPlayerRect)
 
         #Lo que el usuario escribe
         userInput = font.render(newPlayer, True, cianNeon)
-        userInputRect = userInput.get_rect(center=(width/2, height/2 + 100))
+        userInputRect = userInput.get_rect(center=(width / 2, height / 2 + 100))
         myScreen.blit(userInput, userInputRect)
+
+        #En caso de que quiera volver atrás
+        goBack = font.render("Back to Menu", True, cianNeon)
+        goBackRect = goBack.get_rect(center=(width / 2, height / 2 + 200))
+        myScreen.blit(goBack, goBackRect)
+        
 
         for event in pygame.event.get():
 
@@ -248,7 +256,7 @@ def newPlayerMenu():
                     if newPlayer != "" and not users.userExists(newPlayer, usersData):
 
                         newUserCreated = font.render("New user created successfully :)", True, cianNeon)
-                        newUserCreatedRect = newUserCreated.get_rect(center=(width/2, height/2 + 200))
+                        newUserCreatedRect = newUserCreated.get_rect(center=(width / 2, height / 2 + 200))
                         myScreen.blit(newUserCreated, newUserCreatedRect)
                         pygame.display.update()
                         pygame.time.delay(1000)
@@ -258,7 +266,7 @@ def newPlayerMenu():
                     elif newPlayer != "" and users.userExists(newPlayer, usersData):
 
                         userInUseMessage = font.render("Username already in use :(", True, cianNeon)
-                        userInUseMessageRect = userInUseMessage.get_rect(center=(width/2, height/2 + 200))
+                        userInUseMessageRect = userInUseMessage.get_rect(center=(width / 2, height / 2 + 200))
                         myScreen.blit(userInUseMessage, userInUseMessageRect)
                         pygame.display.update()
                         pygame.time.delay(1000)
@@ -268,6 +276,14 @@ def newPlayerMenu():
                 else:
 
                     newPlayer += event.unicode
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+
+                if goBackRect.collidepoint(event.pos):
+
+                    selected.play()
+                    run = False
+                    break
 
         pygame.display.update()
 
@@ -293,12 +309,12 @@ def loginMenu():
 
         #Título principal
         enterCurrentPlayer = font.render("Enter player name", True, cianNeon)
-        enterCurrentPlayerRect = enterCurrentPlayer.get_rect(center=(width/2, height/2))
+        enterCurrentPlayerRect = enterCurrentPlayer.get_rect(center=(width / 2, height / 2))
         myScreen.blit(enterCurrentPlayer, enterCurrentPlayerRect)
 
         #Lo que el usuario escribe
         userInput = font.render(currentPlayer, True, cianNeon)
-        userInputRect = userInput.get_rect(center=(width/2, height/2 + 100))
+        userInputRect = userInput.get_rect(center=(width / 2, height / 2 + 100))
         myScreen.blit(userInput, userInputRect)
 
         for event in pygame.event.get():
@@ -319,7 +335,7 @@ def loginMenu():
                     if currentPlayer != "" and users.userExists(currentPlayer, usersData):
 
                         playerLogedIn = font.render("Player logged in successfully :)", True, cianNeon)
-                        playerLogedInRect = playerLogedIn.get_rect(center=(width/2, height/2 + 200))
+                        playerLogedInRect = playerLogedIn.get_rect(center=(width / 2, height / 2 + 200))
                         myScreen.blit(playerLogedIn, playerLogedInRect)
                         pygame.display.update()
                         pygame.time.delay(1000)
@@ -329,7 +345,7 @@ def loginMenu():
                     elif currentPlayer != "" and not users.userExists(currentPlayer, usersData):
 
                         PlayerNotLoggedIn = font.render("Error in loggin in, try creating an account :(", True, cianNeon)
-                        PlayerNotLoggedInRect = PlayerNotLoggedIn.get_rect(center=(width/2, height/2 + 200))
+                        PlayerNotLoggedInRect = PlayerNotLoggedIn.get_rect(center=(width / 2, height / 2 + 200))
                         myScreen.blit(PlayerNotLoggedIn, PlayerNotLoggedInRect)
                         pygame.display.update()
                         pygame.time.delay(1000)
@@ -362,10 +378,10 @@ def optionsMenu():
         muteEffects = font.render(f"Effects: {'ON' if not effectsMuted else 'OFF'}", True, cianNeon if not effectsMuted else cianNeonOscuro)
         goBack = font.render("Back to Menu", True, cianNeon)
 
-        titleRect = title.get_rect(center=(width/2, height/4))
-        muteMusicRect = muteMusic.get_rect(center=(width/2, height/2))
-        muteEffectsRect = muteEffects.get_rect(center=(width/2, height/2 + 100))
-        goBackRect = goBack.get_rect(center=(width/2, height/2 + 200))
+        titleRect = title.get_rect(center=(width / 2, height/4))
+        muteMusicRect = muteMusic.get_rect(center=(width / 2, height / 2))
+        muteEffectsRect = muteEffects.get_rect(center=(width / 2, height / 2 + 100))
+        goBackRect = goBack.get_rect(center=(width / 2, height / 2 + 200))
 
         #Determina el color del botón
         goBackColor = cianNeonOscuro if goBackRect.collidepoint(mousePos) else cianNeon
