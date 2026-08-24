@@ -240,6 +240,8 @@ def newPlayerMenu():
                         pygame.display.update()
                         pygame.time.delay(1000)
 
+                        newPlayer = ""
+
                 else:
 
                     newPlayer += event.unicode
@@ -251,6 +253,72 @@ def newPlayerMenu():
 
     return newPlayer
 
+#Función: Menú para iniciar con un jugador existente
+def loginMenu():
+
+    pygame.display.set_caption("Enter Player Name")
+
+    #Iniciamos la variable donde se guardará el nombre (temporalmente)
+    currentPlayer = ""
+    finished = False
+
+    usersData = users.loadUsers() #Obtengo el diccionario de jugadores
+
+    while finished == False:
+
+        myScreen.blit(back, (0, 0))
+
+        #Título principal
+        enterCurrentPlayer = font.render("Enter player name", True, cianNeon)
+        enterCurrentPlayerRect = enterCurrentPlayer.get_rect(center=(width/2, height/2))
+        myScreen.blit(enterCurrentPlayer, enterCurrentPlayerRect)
+
+        #Lo que el usuario escribe
+        userInput = font.render(currentPlayer, True, cianNeon)
+        userInputRect = userInput.get_rect(center=(width/2, height/2))
+        myScreen.blit(userInput, userInputRect)
+
+        for event in pygame.event.get():
+
+            if event.type == pygame.QUIT:
+
+                pygame.quit()
+                quit()
+
+            if event.type == pygame.KEYDOWN:
+
+                if event.key == pygame.K_BACKSPACE:
+
+                    currentPlayer = currentPlayer[:-1]
+                
+                elif event.key == pygame.K_RETURN:
+
+                    if currentPlayer != "" and users.userExists(currentPlayer, usersData):
+
+                        playerLogedIn = font.render("Player logged in successfully :)", True, cianNeon)
+                        playerLogedInRect = playerLogedIn.get_rect(center=(width/2, height/2 + 100))
+                        myScreen.blit(playerLogedIn, playerLogedInRect)
+                        pygame.display.update()
+                        pygame.time.delay(1000)
+                        finished = True
+
+                    elif currentPlayer != "" and not users.userExists(currentPlayer, usersData):
+
+                        PlayerNotLoggedIn = font.render("Error in loggin in, try creating an account :(", True, cianNeon)
+                        PlayerNotLoggedInRect = PlayerNotLoggedIn.get_rect(center=(width/2, height/2 + 100))
+                        myScreen.blit(PlayerNotLoggedIn, PlayerNotLoggedInRect)
+                        pygame.display.update()
+                        pygame.time.delay(1000)
+
+                        currentPlayer = ""
+
+                else:
+
+                    currentPlayer += event.unicode
+
+        pygame.display.update()
+
+    return currentPlayer
 
 #Función: Menú de opciones   
 def optionsMenu():
