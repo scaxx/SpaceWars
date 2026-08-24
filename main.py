@@ -196,10 +196,17 @@ def newPlayerMenu():
 
     while finished == False:
 
+        myScreen.blit(back, (0, 0))
+
         #Título principal
         enterNewPlayer = font.render("Enter new player name", True, cianNeon)
         enterNewPlayerRect = enterNewPlayer.get_rect(center=(width/2, height/2))
         myScreen.blit(enterNewPlayer, enterNewPlayerRect)
+
+        #Lo que el usuario escribe
+        userInput = font.render(newPlayer, True, cianNeon)
+        userInputRect = userInput.get_rect(center=(width/2, height/2))
+        myScreen.blit(userInput, userInputRect)
 
         for event in pygame.event.get():
 
@@ -218,25 +225,26 @@ def newPlayerMenu():
 
                     if newPlayer != "" and not users.userExists(newPlayer, usersData):
 
-                        finished = True
-                        newUserCreated = font.render("New user created successfully :)")
+                        newUserCreated = font.render("New user created successfully :)", True, cianNeon)
                         newUserCreatedRect = newUserCreated.get_rect(center=(width/2, height/2 + 100))
                         myScreen.blit(newUserCreated, newUserCreatedRect)
+                        pygame.display.update()
+                        pygame.time.delay(1000)
+                        finished = True
 
                     elif newPlayer != "" and users.userExists(newPlayer, usersData):
 
-                        userInUseMessage = font.render("Username already in use :(")
+                        userInUseMessage = font.render("Username already in use :(", True, cianNeon)
                         userInUseMessageRect = userInUseMessage.get_rect(center=(width/2, height/2 + 100))
                         myScreen.blit(userInUseMessage, userInUseMessageRect)
+                        pygame.display.update()
+                        pygame.time.delay(1000)
 
                 else:
 
-                    #Lo que el usuario escribe
-                    userInput = font.render(newPlayer, True, cianNeon)
-                    userInputRect = userInput.get_rect(center=(width/2, height/2))
-                    myScreen.blit(userInput, userInputRect)
-
                     newPlayer += event.unicode
+
+        pygame.display.update()
 
     users.createUser(newPlayer, usersData)
     users.saveUsers(usersData)
