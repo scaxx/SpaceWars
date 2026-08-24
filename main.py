@@ -124,7 +124,7 @@ def playerName(currentPlayer):
 
     displayPlayer = "Guest" if currentPlayer is None else currentPlayer
     displayPlayerName = font.render(displayPlayer, True, cianNeon)
-    displayPlayerNameRect = displayPlayerName.get_rect(bottomright=(width - len(displayPlayer) - 10, height - 10))
+    displayPlayerNameRect = displayPlayerName.get_rect(bottomright=(width - 10, height - 10))
     myScreen.blit(displayPlayerName, displayPlayerNameRect)
 
 #Función: Menu
