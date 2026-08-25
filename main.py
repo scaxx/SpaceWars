@@ -218,7 +218,7 @@ def newPlayerMenu():
 
     usersData = users.loadUsers() #Obtengo el diccionario de jugadores
 
-    while finished == False or run:
+    while finished == False and run:
 
         myScreen.blit(back, (0, 0))
 
@@ -304,7 +304,7 @@ def loginMenu():
 
     usersData = users.loadUsers() #Obtengo el diccionario de jugadores
 
-    while finished == False or run:
+    while finished == False and run:
 
         mousePos = pygame.mouse.get_pos()
         myScreen.blit(back, (0, 0))
