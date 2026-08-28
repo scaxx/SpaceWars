@@ -27,3 +27,13 @@ def createUser(username, users):
         "scores": []
     })
 
+def updateUserStats(users, username, coins, time, points):
+
+    users[username]["totalCoins"] += coins
+
+    newGame = {
+        "time": time,
+        "points": points
+    }
+
+    users[username]["scores"].append(newGame)
