@@ -2,7 +2,7 @@
     "Guest": {
         "totalCoins": 0, 
         "unlockedSkins": ["default"], 
-        "equippedSkin": "default", "scores": [0]
+        "equippedSkin": "default", 
+        "scores": [0]
     }
-
 }
