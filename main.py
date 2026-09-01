@@ -794,7 +794,7 @@ def handleShields(shieldActive, shieldTime, currentTime):
 #Functión: Juego principal
 def main():
     #Para modificar variables globales
-    global musicMuted, effectsMuted
+    global musicMuted, effectsMuted, currentPlayer
 
     #El juego está corriendo y el jugador no ha sido golpeado
     run = True
@@ -896,6 +896,13 @@ def main():
         if playerHit:
             pygame.time.delay(1000)
             myScreen.blit(back, (0, 0))
+
+            #Guardar estadísiticas si hay un usuario loggeado
+            if currentPlayer is not None:
+                usersData = users.loadUsers()
+                users.updateUserStats(currentPlayer, usersData, coins, elapsedTime, points)
+                users.saveUsers(usersData)
+
             #El jugador pierde el juego, se despliega el menú de Game Over
             if menuGameOver(playerHit, font, width, height, elapsedTime, points, coinsCollected):
                 return        
