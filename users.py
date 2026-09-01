@@ -1,4 +1,5 @@
 import json
+import datetime
 
 def loadUsers():
 
@@ -27,12 +28,12 @@ def createUser(username, users):
         "scores": []
     })
 
-def updateUserStats(users, username, coins, date, time, points):
+def updateUserStats(username, users, coins, time, points):
 
     users[username]["totalCoins"] += coins
 
     newGame = {
-        "date": date,
+        "date": str(datetime.date.today),
         "time": time,
         "points": points
     }
