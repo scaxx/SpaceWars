@@ -900,7 +900,7 @@ def main():
             #Guardar estadísiticas si hay un usuario loggeado
             if currentPlayer is not None:
                 usersData = users.loadUsers()
-                users.updateUserStats(currentPlayer, usersData, coins, elapsedTime, points)
+                users.updateUserStats(currentPlayer, usersData, coinsCollected, elapsedTime, points)
                 users.saveUsers(usersData)
 
             #El jugador pierde el juego, se despliega el menú de Game Over
