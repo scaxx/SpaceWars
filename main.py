@@ -430,7 +430,7 @@ def rankingPlayers():
 
             string = (
 
-                f"{i + 1}. {player['username']} | {player['time']} s" f"| {player['score']} pts" f"| {player['date']}"
+                f"{i + 1}. {player['username']} | {player['time']} s " f"| {player['score']} pts " f"| {player['date']}"
 
             )
 
