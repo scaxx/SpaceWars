@@ -39,3 +39,29 @@ def updateUserStats(username, users, coins, time, points):
     }
 
     users[username]["scores"].append(newGame)
+
+def rankingSort(users):
+
+    activeUsers = []
+
+    for username, data in users.items():
+
+        #La lista de partidas no está vacía
+        if data["scores"]:
+
+            bestGame = max(data["scores"], key = lambda game: game["points"])
+
+            activeUsers.append({
+                "username": username, 
+                "score": bestGame["points"],
+                "time": round(bestGame["time"], 2),
+                "date": bestGame["date"]
+            })
+
+    sortedR = sorted (
+
+        activeUsers, key = lambda x: x["score"], reverse = True
+
+    )
+
+    return sortedR[:10]
