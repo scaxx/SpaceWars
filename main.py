@@ -146,20 +146,23 @@ def menu():
         playB = font.render("Play", True, cianNeon)
         loginB = font.render("Log In", True, cianNeon)
         newPlayerB = font.render("New Player", True, cianNeon)
+        rankingB = font.render("Top 10", True, cianNeon)
         optionsB = font.render("Options", True, cianNeon)
         quitB = font.render("Quit", True, cianNeon)
 
-        titleRect = title.get_rect(center=(width / 2, height / 6))
-        playRect = playB.get_rect(center=(width / 2, height / 6 + 100))
-        loginRect = loginB.get_rect(center=(width / 2, height / 6 + 200))
-        newPlayerRect = newPlayerB.get_rect(center=(width / 2, height / 6 + 300))
-        optionsRect = optionsB.get_rect(center=(width / 2, height / 6 + 400))
-        quitRect = quitB.get_rect(center=(width / 2, height / 6 + 500))
+        titleRect = title.get_rect(center=(width / 2, height / 7))
+        playRect = playB.get_rect(center=(width / 2, height / 7 + 100))
+        loginRect = loginB.get_rect(center=(width / 2, height / 7 + 200))
+        newPlayerRect = newPlayerB.get_rect(center=(width / 2, height / 7 + 300))
+        rankingRect = rankingB.get_rect(center=(width / 2, height / 7 + 400))
+        optionsRect = optionsB.get_rect(center=(width / 2, height / 7 + 500))
+        quitRect = quitB.get_rect(center=(width / 2, height / 7 + 600))
 
         #Define los colores de los botones
         playColor = cianNeonOscuro if playRect.collidepoint(mousePos) else cianNeon
         loginColor = cianNeonOscuro if loginRect.collidepoint(mousePos) else cianNeon
         newPlayerColor = cianNeonOscuro if newPlayerRect.collidepoint(mousePos) else cianNeon
+        rankingColor = cianNeonOscuro if rankingRect.collidepoint(mousePos) else cianNeon
         optionsColor = cianNeonOscuro if optionsRect.collidepoint(mousePos) else cianNeon
         quitColor = cianNeonOscuro if quitRect.collidepoint(mousePos) else cianNeon
 
@@ -167,6 +170,7 @@ def menu():
         playB = font.render("Play", True, playColor)
         loginB = font.render("Log In", True, loginColor)
         newPlayerB = font.render("New Player", True, newPlayerColor)
+        rankingB = font.render("Top 10", True, rankingColor)
         optionsB = font.render("Options", True, optionsColor)
         quitB = font.render("Quit", True, quitColor)
 
@@ -175,6 +179,7 @@ def menu():
         myScreen.blit(playB, playRect)
         myScreen.blit(loginB, loginRect)
         myScreen.blit(newPlayerB, newPlayerRect)
+        myScreen.blit(rankingB, rankingRect)
         myScreen.blit(optionsB, optionsRect)
         myScreen.blit(quitB, quitRect)
 
@@ -195,6 +200,9 @@ def menu():
                 elif newPlayerRect.collidepoint(event.pos):
                     selected.play()
                     currentPlayer = newPlayerMenu()
+                elif rankingRect.collidepoint(event.pos):
+                    selected.play()
+                    rankingPlayers()
                 elif optionsRect.collidepoint(event.pos):
                     selected.play()
                     optionsMenu()
