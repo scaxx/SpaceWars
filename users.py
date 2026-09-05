@@ -33,7 +33,7 @@ def updateUserStats(username, users, coins, time, points):
     users[username]["totalCoins"] += coins
 
     newGame = {
-        "date": str(datetime.date.today),
+        "date": str(datetime.date.today()),
         "time": time,
         "points": points
     }
