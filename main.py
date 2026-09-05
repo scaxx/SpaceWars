@@ -16,7 +16,7 @@ pygame.display.set_caption("Space Wars") #Se muestra el nombre del juego
 cianNeon = (0, 255, 245) #Color para las letras
 cianNeonOscuro = (0, 180, 220) #Color para seleccionado
 font = pygame.font.Font("assets/fonts/Silkscreen-Regular.ttf", 35) #Fuente
-back = pygame.transform.scale(pygame.image.load("assets/backgrounds/background6.jpeg"), (width, height)) #Fondo
+back = pygame.transform.scale(pygame.image.load("assets/backgrounds/bgdefault.jpeg"), (width, height)) #Fondo
 icon = pygame.image.load("assets/icon/icon.png") #Ícono del juego
 pygame.display.set_icon(icon) #Se muestra el ícono
 
@@ -698,13 +698,13 @@ def spawnShields(shieldCount, shieldAdd, width, shieldW, shieldH, shields):
 def menuGameOver(playerHit, font, width, height, elapsedTime, points, coinsCollected):
     if playerHit:
         gameOver = font.render("Game Over", 2, cianNeon)
-        myScreen.blit(gameOver, (width / 2 - gameOver.get_width() / 2, height / 2 - gameOver.get_height() / 2))
+        myScreen.blit(gameOver, (width / 2 - gameOver.get_width() / 2, height / 2 - gameOver.get_height() / 5))
         timeRecord = font.render(f"Time: {round(elapsedTime)} s", 1, cianNeon)
-        myScreen.blit(timeRecord, (width / 2 - timeRecord.get_width() / 2, height / 2 - gameOver.get_height() / 2 + 50))
+        myScreen.blit(timeRecord, (width / 2 - timeRecord.get_width() / 2, height / 2 - gameOver.get_height() / 5 + 50))
         pointsRecord = font.render(f"Points: {points}", 1, cianNeon)
-        myScreen.blit(pointsRecord, (width / 2 - pointsRecord.get_width() / 2, height / 2 - gameOver.get_height() / 2 + 100))
+        myScreen.blit(pointsRecord, (width / 2 - pointsRecord.get_width() / 2, height / 2 - gameOver.get_height() / 5 + 100))
         coinsRecord = font.render(f"Coins Collected: {coinsCollected}", 1, cianNeon)
-        myScreen.blit(coinsRecord, (width / 2 - coinsRecord.get_width() / 2, height / 2 - gameOver.get_height() / 2 + 150))
+        myScreen.blit(coinsRecord, (width / 2 - coinsRecord.get_width() / 2, height / 2 - gameOver.get_height() / 5 + 150))
         pygame.display.update()
         pygame.time.delay(3000)
 
