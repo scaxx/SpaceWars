@@ -321,7 +321,7 @@ def loginMenu():
         userInputRect = userInput.get_rect(center=(width / 2, height / 3 + 100))
         myScreen.blit(userInput, userInputRect)
 
-         #En caso de que quiera volver atrás
+        #En caso de que quiera volver atrás
         goBack = font.render("Back to Menu", True, cianNeon)
         goBackRect = goBack.get_rect(center=(width / 2, height / 3 + 300))
         goBackColor = cianNeonOscuro if goBackRect.collidepoint(mousePos) else cianNeon
@@ -374,6 +374,61 @@ def loginMenu():
                 else:
 
                     currentPlayer += event.unicode
+
+        pygame.display.update()
+
+    return
+
+#Función: Ranking de jugadores
+def rankingPlayers():
+
+    pygame.display.set_caption("Top 10")
+
+    #Obtengo el diccionario de jugadores
+    usersData = users.loadUsers() 
+
+    topPlayers = users.rankingSort(usersData)
+
+    ranking = True
+
+    while ranking:
+
+        mousePos = pygame.mouse.get_pos()
+        myScreen.blit(back, (0, 0))
+
+        #En caso de que quiera volver atrás
+        goBack = font.render("Back to Menu", True, cianNeon)
+        goBackRect = goBack.get_rect(center=(width / 2, height / 3 + 300))
+        goBackColor = cianNeonOscuro if goBackRect.collidepoint(mousePos) else cianNeon
+        goBack = font.render("Back to Menu", True, goBackColor)
+        myScreen.blit(goBack, goBackRect)
+
+        for event in pygame.event.get():
+
+            if event.type == pygame.QUIT:
+
+                pygame.quit()
+                quit()
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                        
+                if goBackRect.collidepoint(event.pos):
+
+                    selected.play()
+                    ranking = False
+                    break
+
+        for i, player in enumerate(topPlayers):
+
+            string = (
+
+                f"{i + 1}. {player['username']} | {player['time']} s" f"| {player['score']} pts" f"| {player['date']}"
+
+            )
+
+            topPlayer = font.render(string, True, cianNeon)
+            topPlayerRect = topPlayer.get_rect(center=(width / 2, height / 5 + (i * 40)))
+            myScreen.blit(topPlayer ,topPlayerRect)
 
         pygame.display.update()
 
