@@ -698,13 +698,13 @@ def spawnShields(shieldCount, shieldAdd, width, shieldW, shieldH, shields):
 def menuGameOver(playerHit, font, width, height, elapsedTime, points, coinsCollected):
     if playerHit:
         gameOver = font.render("Game Over", 2, cianNeon)
-        myScreen.blit(gameOver, (width / 2 - gameOver.get_width() / 2, height / 2 - gameOver.get_height() / 5))
+        myScreen.blit(gameOver, (width / 2 - gameOver.get_width() / 2, height / 4))
         timeRecord = font.render(f"Time: {round(elapsedTime)} s", 1, cianNeon)
-        myScreen.blit(timeRecord, (width / 2 - timeRecord.get_width() / 2, height / 2 - gameOver.get_height() / 5 + 50))
+        myScreen.blit(timeRecord, (width / 2 - timeRecord.get_width() / 2, height / 4 + 100))
         pointsRecord = font.render(f"Points: {points}", 1, cianNeon)
-        myScreen.blit(pointsRecord, (width / 2 - pointsRecord.get_width() / 2, height / 2 - gameOver.get_height() / 5 + 100))
+        myScreen.blit(pointsRecord, (width / 2 - pointsRecord.get_width() / 2, height / 4 + 200))
         coinsRecord = font.render(f"Coins Collected: {coinsCollected}", 1, cianNeon)
-        myScreen.blit(coinsRecord, (width / 2 - coinsRecord.get_width() / 2, height / 2 - gameOver.get_height() / 5 + 150))
+        myScreen.blit(coinsRecord, (width / 2 - coinsRecord.get_width() / 2, height / 4 + 300))
         pygame.display.update()
         pygame.time.delay(3000)
 
